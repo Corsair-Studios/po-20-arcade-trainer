@@ -236,6 +236,72 @@
   line-height:1;
   cursor:pointer;
 }
+#teCourseApp .po-hw-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  padding:16px;
+}
+#teCourseApp .po-hw-overlay[hidden]{display:none}
+#teCourseApp .po-hw-card{
+  background:#2a2320;
+  border:1px solid #efbc74;
+  color:#efbc74;
+  max-width:420px;
+  width:100%;
+  border-radius:8px;
+  padding:20px;
+  position:relative;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+  box-sizing:border-box;
+}
+#teCourseApp .po-hw-title{
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  margin:0 0 10px;
+  padding-right:20px;
+}
+#teCourseApp .po-hw-body{
+  font-size:13px;
+  line-height:1.5;
+  margin:0 0 16px;
+}
+#teCourseApp .po-hw-close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:20px;
+  height:20px;
+  border:0;
+  border-radius:4px;
+  background:transparent;
+  color:#efbc74;
+  font-size:15px;
+  line-height:1;
+  cursor:pointer;
+}
+#teCourseApp .po-hw-ok{
+  display:block;
+  width:100%;
+  padding:9px 12px;
+  border:0;
+  border-radius:4px;
+  background:#efbc74;
+  color:#2a2320;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+#teCourseApp .po-hw-ok:hover{background:#f4cd93}
+@media(max-width:480px){
+  #teCourseApp .po-hw-card{padding:16px}
+}
 #teCourseApp .course-shell{
   position:relative;
   background:var(--course-shell);
@@ -468,6 +534,14 @@
       <span>No sound? Flip your iPhone's ring/silent switch to <strong>Ring</strong>.</span>
       <button type='button' class='ios-audio-hint-x' id='iosAudioHintX' aria-label='Dismiss'>×</button>
     </div>
+    <div class='po-hw-overlay' id='hwNotice' hidden>
+      <div class='po-hw-card'>
+        <button type='button' class='po-hw-close' id='hwNoticeX' aria-label='Dismiss'>×</button>
+        <h2 class='po-hw-title'>Made for your real PO-20</h2>
+        <p class='po-hw-body'>This trainer isn't a true emulator — sounds and timing are approximate. It's built to help you get comfortable with the buttons, patterns, and workflow of an actual Teenage Engineering PO-20 arcade sequencer. You'll get the most out of these lessons with the real hardware in your hands.</p>
+        <button type='button' class='po-hw-ok' id='hwNoticeOk'>Got it</button>
+      </div>
+    </div>
   </section>
 
   <section class='course-shell'>
@@ -633,6 +707,22 @@ qa('.key,.knob-shell').forEach(el=>el.addEventListener('contextmenu',e=>e.preven
   hint.hidden=false;
   const x=q('#iosAudioHintX');
   if(x)x.addEventListener('click',()=>{hint.hidden=true;try{localStorage.setItem('po20:iosHint','1');}catch(e){}});
+})();
+(function(){
+  // One-time notice: this is a trainer, not a true emulator. Shown on all
+  // platforms until dismissed.
+  let dismissed=false;
+  try{dismissed=localStorage.getItem('po20:hwNotice')==='1';}catch(e){}
+  if(dismissed)return;
+  const overlay=q('#hwNotice');
+  if(!overlay)return;
+  overlay.hidden=false;
+  const dismiss=()=>{overlay.hidden=true;try{localStorage.setItem('po20:hwNotice','1');}catch(e){}};
+  const ok=q('#hwNoticeOk');
+  if(ok)ok.addEventListener('click',dismiss);
+  const x=q('#hwNoticeX');
+  if(x)x.addEventListener('click',dismiss);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss();});
 })();
 const strip=q('#strip');
 if(strip)strip.addEventListener('click',()=>q('.course-shell').scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'}));

@@ -1,5 +1,9 @@
 # PO-20 Arcade Course Operator
 
+### ▶ [Play it now](https://corsair-studios.github.io/po-20-arcade-trainer/)
+
+No install — runs in your browser.
+
 A standalone, browser-based training simulator inspired by pocket-sized
 arcade-style sequencers. It teaches the core workflow — programming beats,
 editing patterns, shaping sound, and arranging songs — through guided

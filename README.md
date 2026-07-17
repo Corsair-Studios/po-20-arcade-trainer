@@ -18,8 +18,9 @@ trainer that offers a visual approximation of a device's layout and workflow;
 it is **not** an emulation of any proprietary hardware or sound engine and
 reproduces no proprietary code, firmware, or audio.
 
-It is provided **free to use** for learning and personal, non-commercial
-educational purposes.
+It is provided **free for noncommercial use** — learning, personal study,
+hobby projects, and use by educational institutions — under the terms of the
+license below. Commercial use is not permitted.
 
 ## Features
 
@@ -64,4 +65,8 @@ directory. No build command is required.
 
 ## License
 
-See [LICENSE](LICENSE).
+Licensed under the **PolyForm Noncommercial License 1.0.0** — free to use,
+modify, and share for any noncommercial purpose; commercial use is not
+permitted. See [LICENSE](LICENSE) for the full terms.
+
+Copyright (c) 2026 Corsair Studios, LLC.

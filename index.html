@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Interactive PO-20 Arcade inspired course trainer with guided lessons, pattern editing, sound controls and browser-generated audio.">
+  <title>PO-20 Arcade Course Operator</title>
+  <style>
+    :root{
+      --viz-text:#171717;
+      --viz-muted:#686868;
+      --viz-border:#b9b5a9;
+      --viz-panel:#f1eee3;
+      --viz-card:#d7d2bf;
+      --viz-accent:#7a36c7;
+      --viz-accent-text:#ffffff;
+      --viz-accent-bg-subtle:#ded0ec;
+    }
+    html{background:#bcb8aa}
+    body{margin:0;padding:18px;font-family:Arial,Helvetica,sans-serif;background:#bcb8aa;color:#171717}
+    main{width:min(1120px,100%);margin:0 auto}
+    @media(max-width:520px){body{padding:8px}}
+  </style>
+</head>
+<body>
+<main>
+<div id='teCourseApp'>
+<style>
+#teCourseApp{
+  --device:#080808;
+  --device-purple:#8d2ce0;
+  --device-purple-lit:#c16aff;
+  --device-gold:#efbc74;
+  --course-shell:#d7d2bf;
+  --course-paper:#efebdc;
+  --course-black:#11110f;
+  --course-purple:#7a36c7;
+  --course-orange:#e36f32;
+  --course-lcd:#cbd5b6;
+  --course-lcd-ink:#172018;
+  color:var(--viz-text);
+}
+#teCourseApp *{box-sizing:border-box}
+#teCourseApp button,#teCourseApp select,#teCourseApp input{font:inherit}
+#teCourseApp .layout{
+  display:grid;
+  grid-template-columns:minmax(270px,.88fr) minmax(350px,1.12fr);
+  gap:12px;
+  align-items:start;
+}
+@media(max-width:720px){#teCourseApp .layout{grid-template-columns:1fr}}
+#teCourseApp .device{
+  background:var(--device);
+  color:white;
+  border:1px solid #303030;
+  border-radius:8px;
+  padding:11px;
+}
+#teCourseApp .device.off .dot{background:#2c2c2c!important;box-shadow:none!important}
+#teCourseApp .device-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:30px;
+  color:#8172d9;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.04em;
+}
+#teCourseApp .device-head strong{
+  color:var(--device-gold);
+  font-size:24px;
+  letter-spacing:.12em;
+  transform:rotate(-8deg);
+}
+#teCourseApp .contact-row{
+  display:grid;
+  grid-template-columns:repeat(18,1fr);
+  gap:3px;
+  margin:5px 12px;
+}
+#teCourseApp .contact-row span{height:5px;background:#e7e7e7;border-radius:1px}
+#teCourseApp .device-lcd{
+  background:#dfe6e8;
+  color:#111;
+  border:4px solid #c6ccce;
+  border-radius:3px;
+  padding:7px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  min-height:121px;
+}
+#teCourseApp .device-lcd-top,#teCourseApp .device-lcd-bottom{
+  display:flex;
+  justify-content:space-between;
+  gap:7px;
+  font-size:9px;
+  font-weight:800;
+}
+#teCourseApp .device-lcd-body{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:7px;
+  margin:7px 0;
+  font-size:10px;
+  line-height:1.35;
+}
+#teCourseApp .device-bpm{font-size:18px;font-weight:900}
+#teCourseApp .device-strip{
+  display:grid;
+  grid-template-columns:repeat(16,1fr);
+  gap:2px;
+  margin-top:6px;
+}
+#teCourseApp .device-strip span{height:5px;background:#aab3b5;border-radius:1px}
+#teCourseApp .device-strip span.has{background:#333}
+#teCourseApp .device-strip span.now{height:8px;background:#000}
+#teCourseApp .controls{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px 3px;
+  align-items:end;
+}
+#teCourseApp .control-cell{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:59px;
+}
+#teCourseApp .control-label{font-size:9px;color:#baa5ff}
+#teCourseApp .control-number{font-size:12px;color:#b795ff;font-weight:800}
+#teCourseApp .key{
+  width:40px;
+  height:40px;
+  border:0;
+  background:transparent;
+  position:relative;
+  cursor:pointer;
+  border-radius:8px;
+}
+#teCourseApp .key:before{
+  content:'';
+  position:absolute;
+  inset:5px;
+  background:#d1d1d6;
+  border-radius:6px;
+  box-shadow:-7px 0 0 #6c21a5,7px 0 0 #6c21a5,0 0 0 2px #202020 inset;
+}
+#teCourseApp .dot{
+  position:absolute;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#292929;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+}
+#teCourseApp .step.any .dot{background:#5d466b}
+#teCourseApp .step.selected .dot{background:var(--device-purple-lit);box-shadow:0 0 7px var(--device-purple-lit)}
+#teCourseApp .step.now .dot{background:white;box-shadow:0 0 0 2px #111,0 0 8px white}
+#teCourseApp .step.fire .dot{background:#f4d04e;box-shadow:0 0 0 2px #111,0 0 9px #f4d04e}
+#teCourseApp .key.active .dot{background:var(--device-purple-lit)}
+#teCourseApp .key.held{outline:3px solid #f4d04e;outline-offset:1px}
+#teCourseApp .key.target{outline:3px dashed #f4d04e;outline-offset:3px}
+#teCourseApp .knob-shell{
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  background:#d1d1d6;
+  position:relative;
+  box-shadow:0 0 0 2px #202020 inset;
+}
+#teCourseApp .knob-shell.target{outline:3px dashed #f4d04e;outline-offset:3px}
+#teCourseApp .knob-disc{
+  position:absolute;
+  inset:8px;
+  border-radius:50%;
+  background:var(--device-purple);
+  pointer-events:none;
+}
+#teCourseApp .knob-disc:after{
+  content:'';
+  position:absolute;
+  width:3px;
+  height:10px;
+  background:#4b176e;
+  border-radius:2px;
+  left:50%;
+  top:3px;
+  transform:translateX(-50%);
+}
+#teCourseApp .knob-shell input{
+  position:absolute;
+  inset:-7px;
+  width:54px;
+  height:54px;
+  opacity:0;
+  cursor:ew-resize;
+  margin:0;
+}
+#teCourseApp .knob-value{font-size:9px;color:#d8ceff}
+#teCourseApp .strip{display:none}
+#teCourseApp .pager-dots{display:none}
+#teCourseApp .device-utilities{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:5px;
+  margin-top:8px;
+}
+#teCourseApp .course-shell{
+  position:relative;
+  background:var(--course-shell);
+  color:var(--course-black);
+  border:2px solid var(--course-black);
+  border-radius:4px;
+  padding:12px;
+  overflow:hidden;
+}
+#teCourseApp .course-shell:before{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  top:42px;
+  height:5px;
+  background:repeating-linear-gradient(90deg,var(--course-black) 0 12px,transparent 12px 17px);
+  opacity:.18;
+}
+#teCourseApp .screw{
+  position:absolute;
+  width:9px;
+  height:9px;
+  border:1px solid var(--course-black);
+  border-radius:50%;
+  background:#b6b09d;
+}
+#teCourseApp .screw:after{content:'';position:absolute;left:1px;right:1px;top:3px;height:1px;background:var(--course-black);transform:rotate(-20deg)}
+#teCourseApp .s1{left:5px;top:5px}#teCourseApp .s2{right:5px;top:5px}#teCourseApp .s3{left:5px;bottom:5px}#teCourseApp .s4{right:5px;bottom:5px}
+#teCourseApp .course-header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:start;
+  min-height:42px;
+  padding:0 8px 8px;
+}
+#teCourseApp .course-wordmark{
+  font-family:Arial,sans-serif;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:-.07em;
+  line-height:.9;
+}
+#teCourseApp .course-wordmark small{
+  display:block;
+  margin-top:5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+#teCourseApp .purple-sticker{
+  background:var(--course-purple);
+  color:white;
+  padding:5px 9px;
+  border-radius:999px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:9px;
+  font-weight:800;
+  transform:rotate(4deg);
+}
+#teCourseApp .course-lcd-bezel{
+  background:var(--course-black);
+  padding:7px;
+  border-radius:3px;
+  margin:9px 7px 0;
+  position:relative;
+}
+#teCourseApp .course-lcd-bezel:before{
+  content:'instruction computer';
+  position:absolute;
+  right:8px;
+  top:-10px;
+  color:var(--course-black);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:7px;
+  letter-spacing:.12em;
+}
+#teCourseApp .course-lcd{
+  background:var(--course-lcd);
+  color:var(--course-lcd-ink);
+  border:3px solid #9ca98e;
+  padding:8px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  text-transform:uppercase;
+}
+#teCourseApp .lcd-row{display:flex;justify-content:space-between;gap:8px;font-size:9px;font-weight:900}
+#teCourseApp .lcd-title{font-size:13px;font-weight:900;margin:7px 0 5px;border-bottom:2px solid rgba(0,0,0,.4);padding-bottom:4px}
+#teCourseApp .lcd-start{font-size:8px;font-weight:900;letter-spacing:.06em;margin:-1px 0 6px;padding:3px 5px;border:1px solid rgba(0,0,0,.3);background:rgba(255,255,255,.13)}
+#teCourseApp #instruction{font-size:11px;font-weight:900;letter-spacing:.015em}
+#teCourseApp .lcd-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+#teCourseApp .lcd-field{border:2px solid rgba(0,0,0,.24);min-height:46px;padding:6px;background:rgba(255,255,255,.11)}
+#teCourseApp .lcd-field.wide{grid-column:1/-1}
+#teCourseApp .lcd-cap{font-size:7px;opacity:.65;margin-bottom:3px;letter-spacing:.08em}
+#teCourseApp .lcd-text{font-size:10px;line-height:1.28}
+#teCourseApp .lcd-status{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:900;margin-top:6px}
+#teCourseApp .lcd-status:before{content:'';width:8px;height:8px;border-radius:50%;background:var(--course-orange)}
+#teCourseApp .course-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:7px 7px 0}
+#teCourseApp .course-button,#teCourseApp .utility-button,#teCourseApp .lesson-button,#teCourseApp .chapter-button{border:1px solid var(--course-black);background:var(--course-paper);color:var(--course-black);cursor:pointer}
+#teCourseApp .course-button{min-height:32px;padding:5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8px;font-weight:800;text-transform:uppercase}
+#teCourseApp .course-button.primary{background:var(--course-black);color:white}
+#teCourseApp .course-button.restart{background:var(--course-orange);color:white}
+#teCourseApp .course-deck{display:grid;grid-template-columns:63px 1fr;gap:7px;margin:9px 7px 5px}
+#teCourseApp .chapter-rail{display:flex;flex-direction:column;gap:4px}
+#teCourseApp .chapter-button{display:grid;grid-template-columns:22px 1fr;gap:4px;align-items:center;min-height:32px;padding:3px;text-align:left}
+#teCourseApp .chapter-button .chapter-number{background:var(--course-black);color:white;height:24px;display:grid;place-items:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;font-weight:900}
+#teCourseApp .chapter-button .chapter-short{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:7px;line-height:1.1;text-transform:uppercase}
+#teCourseApp .chapter-button.active{background:var(--course-purple);color:white}
+#teCourseApp .lesson-deck{background:var(--course-paper);border:1px solid var(--course-black);padding:7px;min-height:278px}
+#teCourseApp .deck-header{display:grid;grid-template-columns:1fr auto;gap:8px;padding-bottom:6px;border-bottom:2px solid var(--course-black)}
+#teCourseApp .deck-title{font-size:13px;font-weight:900;text-transform:uppercase}
+#teCourseApp .deck-count{background:var(--course-black);color:white;padding:3px 5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8px}
+#teCourseApp .chapter-description{font-size:10px;line-height:1.35;margin:6px 0}
+#teCourseApp .progress-tape{display:grid;grid-template-columns:repeat(18,1fr);gap:2px;margin:7px 0}
+#teCourseApp .progress-tape span{height:8px;border:1px solid var(--course-black);background:transparent}
+#teCourseApp .progress-tape span.done{background:var(--course-purple)}
+#teCourseApp .lesson-list{display:grid;gap:5px}
+#teCourseApp .lesson-button{display:grid;grid-template-columns:29px 1fr auto;gap:6px;align-items:center;padding:5px;text-align:left;min-height:42px;position:relative}
+#teCourseApp .lesson-button:after{content:'';position:absolute;right:35px;top:0;bottom:0;border-left:1px dashed rgba(0,0,0,.28)}
+#teCourseApp .lesson-button.current{background:var(--course-black);color:white}
+#teCourseApp .lesson-button.done{background:#d8c9e7}
+#teCourseApp .lesson-number{height:29px;display:grid;place-items:center;background:var(--course-orange);color:white;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;font-weight:900}
+#teCourseApp .lesson-name{font-size:10px;font-weight:800;text-transform:uppercase}
+#teCourseApp .lesson-meta{font-size:8px;opacity:.72;margin-top:2px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+#teCourseApp .lesson-mark{width:25px;text-align:center;font-size:11px;font-weight:900}
+#teCourseApp .course-bottom{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin:8px 7px 0;padding-top:6px;border-top:2px solid var(--course-black)}
+#teCourseApp .microcopy{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:7px;line-height:1.35;letter-spacing:.06em}
+#teCourseApp .course-meter{display:grid;grid-template-columns:repeat(4,29px);gap:3px}
+#teCourseApp .course-meter div{border:1px solid var(--course-black);background:var(--course-paper);text-align:center;padding:3px 1px}
+#teCourseApp .course-meter small{display:block;font-size:6px;text-transform:uppercase}
+#teCourseApp .course-meter strong{font-size:11px}
+#teCourseApp .chain-line{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+#teCourseApp .chain-line span{width:22px;height:22px;border:1px solid var(--course-black);background:var(--course-paper);display:grid;place-items:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px}
+#teCourseApp .chain-line span.active{background:var(--course-purple);color:white}
+#teCourseApp .utility-button{padding:6px 7px;font-size:10px}
+#teCourseApp .utility-button.target{outline:3px dashed #f4d04e;outline-offset:2px}
+@media(max-width:719.98px){
+  #teCourseApp .strip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--course-black);
+    color:var(--course-paper);
+    border:1px solid var(--course-black);
+    border-radius:4px;
+    padding:7px 9px;
+    margin-bottom:9px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  #teCourseApp .strip-step{font-size:9px;font-weight:900;color:var(--course-orange);white-space:nowrap}
+  #teCourseApp .strip-instruction{font-size:10px;font-weight:800;flex:1;line-height:1.25;min-width:0}
+  #teCourseApp .strip-status{font-size:8px;font-weight:900;color:var(--device-purple-lit);white-space:nowrap}
+  #teCourseApp .layout{
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    gap:0;
+  }
+  #teCourseApp .layout::-webkit-scrollbar{display:none}
+  #teCourseApp .layout.no-swipe{overflow-x:hidden}
+  #teCourseApp .layout>.device,#teCourseApp .layout>.course-shell{
+    flex:0 0 100%;
+    min-width:100%;
+    max-height:100dvh;
+    overflow-y:auto;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+  #teCourseApp .pager-dots{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:8px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:8px;
+    letter-spacing:.1em;
+    color:var(--viz-muted);
+    text-transform:uppercase;
+    opacity:.75;
+  }
+  #teCourseApp .pager-dots .pd-emu,#teCourseApp .pager-dots .pd-course{width:6px;height:6px;border-radius:50%;background:var(--viz-border);display:inline-block}
+  #teCourseApp .pager-dots .active{background:var(--viz-accent)}
+  #teCourseApp .key{width:44px;height:44px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  #teCourseApp .knob-shell{width:44px;height:44px;touch-action:none;user-select:none;-webkit-user-select:none}
+  #teCourseApp .knob-shell input{touch-action:none}
+}
+</style>
+
+<div class='strip' id='strip' role='button' tabindex='0' aria-label='Jump to trainer panel'>
+  <span class='strip-step' id='stripStep'>STEP —</span>
+  <span class='strip-instruction' id='stripInstruction'>Choose a chapter and lesson below.</span>
+  <span class='strip-status' id='stripStatus'>READY FOR INPUT</span>
+</div>
+<div class='layout' id='layoutTrack'>
+  <section class='device' id='device'>
+    <div class='device-head'><span>arcade</span><strong>PO</strong><span>trainer</span></div>
+    <div class='contact-row' id='contactsTop'></div>
+    <div class='device-lcd'>
+      <div class='device-lcd-top'><span id='mode'>PLAY MODE</span><span id='held'>HELD —</span></div>
+      <div class='device-lcd-body'>
+        <div><strong id='pattern'>PATTERN 01</strong><br><strong id='sound'>02 BASS DRUM</strong><br><span id='hint'>PRESS PLAY OR WRITE</span><br><span id='chainText'>CHAIN 1</span></div>
+        <strong class='device-bpm' id='bpm'>120</strong>
+      </div>
+      <div class='device-lcd-bottom'><span id='power'>PWR ON</span><span id='message'>READY</span></div>
+      <div class='device-strip' id='stepStrip'></div>
+    </div>
+    <div class='contact-row' id='contactsBottom'></div>
+    <div class='controls' id='controls'>
+      <div class='control-cell'><button type='button' class='key fn' data-fn='sound' data-key='sound'><span class='dot'></span></button><span class='control-label'>sound</span></div>
+      <div class='control-cell'><button type='button' class='key fn' data-fn='pattern' data-key='pattern'><span class='dot'></span></button><span class='control-label'>pattern</span></div>
+      <div class='control-cell'><button type='button' class='key fn' data-fn='bpm' data-key='bpm'><span class='dot'></span></button><span class='control-label'>bpm</span></div>
+      <div class='control-cell'><div class='knob-shell' id='knobAShell' data-key='knobA'><div class='knob-disc' id='knobADisc'></div><input id='knobA' type='range' min='0' max='100' value='50' aria-label='Knob A'></div><span class='control-label'>knob A</span><span class='knob-value' id='knobAValue'>50</span></div>
+      <div class='control-cell'><div class='knob-shell' id='knobBShell' data-key='knobB'><div class='knob-disc' id='knobBDisc'></div><input id='knobB' type='range' min='0' max='100' value='50' aria-label='Knob B'></div><span class='control-label'>knob B</span><span class='knob-value' id='knobBValue'>50</span></div>
+    </div>
+    <div class='device-utilities'>
+      <button type='button' class='utility-button' id='releaseBtn' data-key='release'>Release held</button>
+      <button type='button' class='utility-button' id='batteryBtn' data-key='battery'>Remove batteries</button>
+      <button type='button' class='utility-button' id='demoBtn'>Load demo</button>
+      <button type='button' class='utility-button' id='blankBtn'>Start blank</button>
+    </div>
+  </section>
+
+  <section class='course-shell'>
+    <span class='screw s1'></span><span class='screw s2'></span><span class='screw s3'></span><span class='screw s4'></span>
+    <header class='course-header'>
+      <div class='course-wordmark'>course<br>operator<small>PO-20 ARCADE / TRAINING UNIT</small></div>
+      <div class='purple-sticker'>guided signal path</div>
+    </header>
+    <div class='course-lcd-bezel'>
+      <div class='course-lcd' aria-live='polite'>
+        <div class='lcd-row'><span id='chapterLabel'>COURSE READY</span><span id='stepLabel'>STEP —</span></div>
+        <div class='lcd-title' id='lessonTitle'>SELECT A LESSON</div>
+        <div class='lcd-start' id='setupLabel'>STARTING STATE · CHOOSE A LESSON</div>
+        <div class='lcd-grid'>
+          <div class='lcd-field wide'><div class='lcd-cap'>DO THIS</div><div class='lcd-text' id='instruction'>Choose a chapter and lesson below.</div></div>
+          <div class='lcd-field'><div class='lcd-cap'>WHY</div><div class='lcd-text' id='why'>Lessons progress from basic controls to complete songs.</div></div>
+          <div class='lcd-field'><div class='lcd-cap'>EXPECTED</div><div class='lcd-text' id='expected'>The required controls will be highlighted.</div></div>
+        </div>
+        <div class='lcd-status' id='lessonStatus'>READY FOR INPUT</div>
+      </div>
+    </div>
+    <div class='course-buttons'>
+      <button type='button' class='course-button primary' id='repeatBtn'>Repeat step</button>
+      <button type='button' class='course-button' id='targetBtn'>Show target</button>
+      <button type='button' class='course-button restart' id='restartBtn'>Restart lesson</button>
+      <button type='button' class='course-button' id='exitBtn'>Exit</button>
+    </div>
+    <div class='course-deck'>
+      <nav class='chapter-rail' id='chapterRail' aria-label='Course chapters'></nav>
+      <section class='lesson-deck'>
+        <div class='deck-header'><div class='deck-title' id='deckTitle'>Getting oriented</div><div class='deck-count' id='deckCount'>0/18</div></div>
+        <div class='chapter-description' id='chapterDescription'></div>
+        <div class='progress-tape' id='progressTape'></div>
+        <div class='lesson-list' id='lessonList'></div>
+      </section>
+    </div>
+    <footer class='course-bottom'>
+      <div>
+        <div class='microcopy'>TRAINING DATA REMAINS IN THIS SESSION ONLY. RESTART LESSON ALWAYS RESTORES THE SELECTED LESSON'S ORIGINAL DEVICE STATE AND RETURNS TO STEP 01.</div>
+        <div class='chain-line' id='chainView'></div>
+      </div>
+      <div class='course-meter'>
+        <div><small>pattern</small><strong id='metricPattern'>1</strong></div>
+        <div><small>sound</small><strong id='metricSound'>2</strong></div>
+        <div><small>knob a</small><strong id='metricA'>50</strong></div>
+        <div><small>knob b</small><strong id='metricB'>50</strong></div>
+      </div>
+    </footer>
+  </section>
+</div>
+<div class='pager-dots' id='pagerDots' aria-hidden='true'><span class='pd-emu active'></span>◀ EMULATOR · TRAINER ▶<span class='pd-course'></span></div>
+
+<script>
+(()=>{
+const root=document.getElementById('teCourseApp'),q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
+const soundNames=['bass','bass drum','snare','hi-hat','tom','blip','sync','noise','arp 1','arp 2','arp 3','arp 4','lead','vibrato','portamento','echo'];
+const chapters=[
+{id:'start',short:'first contact',title:'1 · Getting oriented',description:'Learn the layout, moving playhead, numbered-key context, Play mode and Write mode.'},
+{id:'beat',short:'beat lab',title:'2 · Your first beat',description:'Build a complete kick, snare and hi-hat pattern one layer at a time.'},
+{id:'edit',short:'safe edit',title:'3 · Editing without fear',description:'Clear one layer, erase a pattern and copy a backup before making changes.'},
+{id:'sound',short:'sound lab',title:'4 · Shaping the sound',description:'Use Knob A, Knob B, swing and fine tempo controls.'},
+{id:'record',short:'live input',title:'5 · Live recording',description:'Punch notes into a moving pattern and overdub a second sound.'},
+{id:'song',short:'song mode',title:'6 · Patterns and songs',description:'Switch patterns, create a variation and arrange an AABB pattern chain.'},
+{id:'perform',short:'stage mode',title:'7 · Performance and recovery',description:'Practice chords, effects, fade-out and the factory-reset gesture.'}
+];
+const lessons={
+leds:{chapter:'start',title:'Follow the 16-step playhead',time:'2 min',setup:'demo',steps:[{do:'Press PLAY.',why:'The center LEDs are the sequencer clock.',expected:'A white dot advances from key 1 through key 16; yellow marks sounding steps.',event:'playOn',targets:['play']},{do:'Watch until the playhead loops back to key 1.',why:'One pattern contains sixteen steps.',expected:'The active pattern reaches its boundary and restarts.',event:'boundary',targets:[]}]},
+context:{chapter:'start',title:'Understand numbered-key context',time:'3 min',setup:'demo',steps:[{do:'Long-press SOUND.',why:'Holding a function changes what keys 1–16 mean.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 6.',why:'SOUND + 6 selects sound slot 6.',expected:'BLIP becomes selected.',event:'sound6',targets:['n6']},{do:'Tap any numbered key.',why:'With no function held, numbered keys audition the selected sound.',expected:'You hear BLIP without editing the pattern.',event:'audition',targets:[]}]},
+modes:{chapter:'start',title:'Play mode versus Write mode',time:'3 min',setup:'blank',steps:[{do:'Tap key 1.',why:'In Play mode a key previews the sound.',expected:'You hear a sound, but no step remains lit.',event:'audition',targets:['n1']},{do:'Press WRITE.',why:'Write mode changes keys 1–16 into step switches.',expected:'WRITE MODE appears.',event:'writeOn',targets:['write']},{do:'Press key 1.',why:'The same key now edits sequencer step 1.',expected:'Step 1 remains purple.',event:'step1',targets:['n1']}]},
+kick:{chapter:'beat',title:'Program the kick drum',time:'4 min',setup:'blank',steps:[{do:'Long-press SOUND.',why:'Choose a sound before editing its steps.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 2.',why:'Sound slot 2 is the bass drum.',expected:'BASS DRUM becomes selected.',event:'sound2',targets:['n2']},{do:'Press WRITE.',why:'Write mode allows step entry.',expected:'WRITE MODE appears.',event:'writeOn',targets:['write']},{do:'Turn on steps 1, 5, 9 and 13.',why:'These are four evenly spaced quarter-note hits.',expected:'Four purple dots appear.',event:'kickReady',targets:['n1','n5','n9','n13']}]},
+snare:{chapter:'beat',title:'Add the backbeat snare',time:'3 min',setup:'kick',steps:[{do:'Long-press SOUND.',why:'Select a new layer without changing the kick.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 3.',why:'Sound slot 3 is the snare.',expected:'SNARE becomes selected.',event:'sound3',targets:['n3']},{do:'Press WRITE.',why:'Enter step editing for the snare.',expected:'WRITE MODE appears.',event:'writeOn',targets:['write']},{do:'Turn on steps 5 and 13.',why:'These place the snare on beats two and four.',expected:'Two purple snare steps appear.',event:'snareReady',targets:['n5','n13']}]},
+hats:{chapter:'beat',title:'Add a hi-hat pulse',time:'3 min',setup:'backbeat',steps:[{do:'Long-press SOUND.',why:'Select the final drum layer.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 4.',why:'Sound slot 4 is the hi-hat.',expected:'HI-HAT becomes selected.',event:'sound4',targets:['n4']},{do:'Press WRITE.',why:'Enter step editing for the hi-hat.',expected:'WRITE MODE appears.',event:'writeOn',targets:['write']},{do:'Turn on steps 3, 7, 11 and 15.',why:'The hats fill the spaces between the main hits.',expected:'Four hi-hat steps appear.',event:'hatReady',targets:['n3','n7','n11','n15']},{do:'Press PLAY.',why:'Hear all three layers together.',expected:'The complete groove plays.',event:'playOn',targets:['play']}]},
+clearSound:{chapter:'edit',title:'Clear only one sound layer',time:'4 min',setup:'backbeat',steps:[{do:'Long-press SOUND.',why:'Select only the layer you intend to remove.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 2.',why:'Choose the bass drum layer.',expected:'The kick steps become visible.',event:'sound2',targets:['n2']},{do:'Press WRITE.',why:'The selected sound can now be edited.',expected:'WRITE MODE appears.',event:'writeOn',targets:['write']},{do:'Turn off every purple step.',why:'A sound layer is cleared by disabling all its active steps.',expected:'The kick disappears while the snare remains.',event:'channelEmpty',targets:['active']}]},
+clearPattern:{chapter:'edit',title:'Clear the entire pattern',time:'2 min',setup:'backbeat',steps:[{do:'Long-press CHORD.',why:'CHORD begins the clear-pattern command.',expected:'CHORD remains held.',event:'holdChord',targets:['chord']},{do:'Press PATTERN.',why:'CHORD + PATTERN clears every layer in the active pattern.',expected:'The active pattern becomes empty.',event:'patternCleared',targets:['pattern']}]},
+copy:{chapter:'edit',title:'Copy a pattern before experimenting',time:'3 min',setup:'backbeat',steps:[{do:'Long-press PATTERN.',why:'Pattern operations begin with PATTERN held.',expected:'PATTERN remains held.',event:'holdPattern',targets:['pattern']},{do:'Press WRITE.',why:'PATTERN + WRITE arms pattern copy.',expected:'The display requests a destination.',event:'copyArmed',targets:['write']},{do:'Press key 2.',why:'Key 2 selects pattern slot 2 as the destination.',expected:'Pattern 1 is copied into pattern 2.',event:'copied2',targets:['n2']}]},
+knobA:{chapter:'sound',title:'Use Knob A',time:'3 min',setup:'demo',steps:[{do:'Tap any numbered key.',why:'First establish the unchanged reference sound.',expected:'You hear the selected sound.',event:'audition',targets:[]},{do:'Move Knob A substantially.',why:'In this trainer, Knob A controls the primary pitch parameter.',expected:'The sound moves lower or higher.',event:'knobA',targets:['knobA']}]},
+knobB:{chapter:'sound',title:'Use Knob B',time:'3 min',setup:'demo',steps:[{do:'Tap any numbered key.',why:'First establish the unchanged reference sound.',expected:'You hear the selected sound.',event:'audition',targets:[]},{do:'Move Knob B substantially.',why:'Knob B changes tone, waveform and decay character.',expected:'The sound becomes brighter, duller, shorter or longer.',event:'knobB',targets:['knobB']}]},
+tempo:{chapter:'sound',title:'Adjust swing and fine tempo',time:'4 min',setup:'demo',steps:[{do:'Long-press BPM.',why:'BPM changes both knobs to alternate functions.',expected:'BPM remains held.',event:'holdBpm',targets:['bpm']},{do:'Move Knob A.',why:'BPM + Knob A controls swing.',expected:'The swing percentage changes.',event:'swing',targets:['knobA']},{do:'Move Knob B.',why:'BPM + Knob B fine-tunes tempo.',expected:'The BPM number changes smoothly.',event:'fineTempo',targets:['knobB']}]},
+live:{chapter:'record',title:'Record while playback runs',time:'5 min',setup:'blank',steps:[{do:'Long-press SOUND.',why:'Choose a sound before recording.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 6.',why:'BLIP is easy to hear during recording practice.',expected:'BLIP becomes selected.',event:'sound6',targets:['n6']},{do:'Press PLAY.',why:'Live recording requires a moving playhead.',expected:'Playback begins.',event:'playOn',targets:['play']},{do:'Long-press WRITE.',why:'Holding WRITE during playback arms live recording.',expected:'LIVE REC appears.',event:'holdWriteLive',targets:['write']},{do:'Tap numbered keys four times.',why:'Each tap lands on the currently moving step.',expected:'Four or more steps are stored.',event:'liveFour',targets:[]},{do:'Press Release held.',why:'Releasing WRITE ends the live-record pass.',expected:'Playback continues without recording.',event:'releaseHeld',targets:['release']}]},
+overdub:{chapter:'record',title:'Overdub a second sound',time:'5 min',setup:'kick',steps:[{do:'Long-press SOUND.',why:'Choose a second layer without erasing the kick.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 4.',why:'Select the hi-hat.',expected:'HI-HAT becomes selected.',event:'sound4',targets:['n4']},{do:'Press PLAY.',why:'The kick becomes your timing reference.',expected:'Playback begins.',event:'playOn',targets:['play']},{do:'Long-press WRITE.',why:'Arm live recording for the hi-hat.',expected:'LIVE REC appears.',event:'holdWriteLive',targets:['write']},{do:'Tap numbered keys four times.',why:'The hats are added over the existing kick.',expected:'Both sounds now occupy the pattern.',event:'liveFour',targets:[]}]},
+selectPattern:{chapter:'song',title:'Switch between pattern slots',time:'3 min',setup:'song',steps:[{do:'Long-press PATTERN.',why:'Keys 1–16 now represent pattern slots.',expected:'PATTERN remains held.',event:'holdPattern',targets:['pattern']},{do:'Press key 2.',why:'This enters pattern slot 2.',expected:'The pending selection reads 2.',event:'patternEntry2',targets:['n2']},{do:'Press Release held.',why:'Releasing confirms a single pattern selection.',expected:'Pattern 2 becomes active.',event:'selected2',targets:['release']}]},
+variation:{chapter:'song',title:'Turn pattern B into a variation',time:'5 min',setup:'song',steps:[{do:'Long-press PATTERN.',why:'First enter pattern-selection mode.',expected:'PATTERN remains held.',event:'holdPattern',targets:['pattern']},{do:'Press key 2.',why:'This queues pattern slot 2 while PATTERN remains held.',expected:'The pending pattern selection reads 2.',event:'patternEntry2',targets:['n2']},{do:'Press Release held.',why:'Releasing PATTERN confirms the queued selection.',expected:'Pattern 2 becomes active.',event:'selected2',targets:['release']},{do:'Long-press SOUND.',why:'Now choose the sound that will make pattern B different.',expected:'SOUND remains held.',event:'holdSound',targets:['sound']},{do:'Press key 4.',why:'Sound slot 4 is the hi-hat.',expected:'HI-HAT becomes selected.',event:'sound4',targets:['n4']},{do:'Press WRITE.',why:'Write mode lets you add hi-hat steps to pattern 2 only.',expected:'WRITE MODE appears.',event:'writeOn',targets:['write']},{do:'Turn on steps 3, 7, 11 and 15.',why:'These added hi-hats turn pattern B into a clear variation of pattern A.',expected:'Pattern 2 now differs from pattern 1.',event:'hatReady',targets:['n3','n7','n11','n15']}]},
+chain:{chapter:'song',title:'Arrange an AABB mini-song',time:'4 min',setup:'song',steps:[{do:'Long-press PATTERN.',why:'Multiple entries create a pattern chain.',expected:'PATTERN remains held.',event:'holdPattern',targets:['pattern']},{do:'Press 1, 1, 2 and 2.',why:'This sequence means A, A, B, B.',expected:'The pending chain reads 1-1-2-2.',event:'chainAABB',targets:['n1','n2']},{do:'Press Release held.',why:'Releasing commits the chain.',expected:'The chain is saved.',event:'releaseHeld',targets:['release']},{do:'Press PLAY.',why:'Playback now follows the complete song chain.',expected:'Pattern 1 plays twice, then pattern 2 twice.',event:'playOn',targets:['play']}]},
+chord:{chapter:'perform',title:'Choose a chord',time:'3 min',setup:'demo',steps:[{do:'Long-press CHORD.',why:'The numbered keys now select chord slots.',expected:'CHORD remains held.',event:'holdChord',targets:['chord']},{do:'Press key 9.',why:'This chooses chord slot 9.',expected:'The chord changes and a preview plays.',event:'chord9',targets:['n9']}]},
+fx:{chapter:'perform',title:'Trigger a performance effect',time:'3 min',setup:'demo',steps:[{do:'Press PLAY.',why:'Effects are clearest during playback.',expected:'The sequencer begins.',event:'playOn',targets:['play']},{do:'Long-press FX.',why:'The numbered keys now select effects.',expected:'FX remains held.',event:'holdFx',targets:['fx']},{do:'Press key 13.',why:'This activates a glitch-style training effect.',expected:'Effect 13 appears on the display.',event:'fx13',targets:['n13']}]},
+fade:{chapter:'perform',title:'Fade out and stop',time:'2 min',setup:'demo',steps:[{do:'Press PLAY.',why:'Begin with the pattern running.',expected:'Playback begins.',event:'playOn',targets:['play']},{do:'Long-press FX.',why:'FX is the first half of the fade command.',expected:'FX remains held.',event:'holdFx',targets:['fx']},{do:'Press PLAY while FX is held.',why:'FX + PLAY performs a fade-out.',expected:'Volume fades and playback stops.',event:'fadeStop',targets:['play']}]},
+reset:{chapter:'perform',title:'Practice the factory-reset gesture',time:'4 min',setup:'demo',steps:[{do:'Press Remove batteries.',why:'The reset starts with the unit powered off.',expected:'All device lights turn off.',event:'batteryOut',targets:['battery']},{do:'Long-press PATTERN.',why:'PATTERN must be held while the unit is off.',expected:'PATTERN remains held.',event:'holdPattern',targets:['pattern']},{do:'Long-press WRITE too.',why:'The reset gesture uses PATTERN and WRITE together.',expected:'Both controls remain held.',event:'holdWriteReset',targets:['write']},{do:'Press Insert batteries.',why:'Battery insertion completes the reset gesture.',expected:'The default demo state returns.',event:'factoryReset',targets:['battery']}]}
+};
+const setupLabels={blank:'EMPTY PATTERN',kick:'KICK PATTERN PRELOADED',backbeat:'KICK + SNARE PRELOADED',demo:'DEMO PATTERN PRELOADED',song:'PATTERNS 1 + 2 PRELOADED'};
+const S={patterns:[],pattern:0,sound:1,bpm:120,swing:0,write:false,play:false,power:true,step:0,current:0,timer:null,held:new Set(),pending:[],copy:false,chain:[0],chainPos:0,chord:0,fx:-1,audio:null,master:null,filter:null,params:Array.from({length:16},()=>[50,50]),lesson:null,lastLesson:null,lessonStep:0,lessonComplete:false,completed:new Set(),liveCount:0,chapter:'start'};
+const emptyPatterns=()=>Array.from({length:16},()=>Array.from({length:16},()=>Array(16).fill(false)));
+function addContacts(id){for(let i=0;i<18;i++)q(id).appendChild(document.createElement('span'))}
+addContacts('#contactsTop');addContacts('#contactsBottom');for(let i=0;i<16;i++)q('#stepStrip').appendChild(document.createElement('span'));
+const controls=q('#controls');for(let row=0;row<4;row++){for(let col=0;col<5;col++){const cell=document.createElement('div');cell.className='control-cell';if(col<4){const n=row*4+col+1;cell.innerHTML=`<button type='button' class='key step' data-step='${n-1}' data-key='n${n}'><span class='dot'></span></button><span class='control-number'>${n}</span>`}else{const fn=['chord','fx','play','write'][row];cell.innerHTML=`<button type='button' class='key fn' data-fn='${fn}' data-key='${fn}'><span class='dot'></span></button><span class='control-label'>${fn}</span>`}controls.appendChild(cell)}}
+function log(text){q('#message').textContent=text.toUpperCase().slice(0,17)}
+function baseSetup(mode){stop(false);S.patterns=emptyPatterns();S.pattern=0;S.sound=1;S.bpm=120;S.swing=0;S.write=false;S.play=false;S.power=true;S.step=0;S.current=0;S.held.clear();S.pending=[];S.copy=false;S.chain=[0];S.chainPos=0;S.chord=0;S.fx=-1;S.liveCount=0;S.params=Array.from({length:16},()=>[50,50]);if(['kick','backbeat','demo','song'].includes(mode))[0,4,8,12].forEach(i=>S.patterns[0][1][i]=true);if(['backbeat','demo','song'].includes(mode))[4,12].forEach(i=>S.patterns[0][2][i]=true);if(mode==='demo'){[2,6,10,14].forEach(i=>S.patterns[0][3][i]=true);[0,3,6,9,12,15].forEach(i=>S.patterns[0][12][i]=true)}if(mode==='song'){S.patterns[1]=S.patterns[0].map(ch=>ch.slice());[2,6,10,14].forEach(i=>S.patterns[1][3][i]=true);S.chain=[0,0,1,1]}q('#knobA').value=50;q('#knobB').value=50;rotateKnobs();log(mode==='blank'?'Blank loaded':mode==='song'?'Song loaded':'Demo loaded');render()}
+function audio(){if(!S.audio){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;S.audio=new A();S.master=S.audio.createGain();S.filter=S.audio.createBiquadFilter();S.filter.type='lowpass';S.filter.connect(S.master).connect(S.audio.destination)}if(S.audio.state==='suspended')S.audio.resume();S.master.gain.value=.13;return S.audio}
+function trigger(index,step){if(!S.power)return;const c=audio();if(!c)return;const now=c.currentTime,A=S.params[index][0],B=S.params[index][1],pitch=(A-50)/50*10,scale=[0,2,3,5,7,9,10,12,14,15,17,19,21,22,24,26],freq=90*Math.pow(2,(scale[step]+pitch)/12),o=c.createOscillator(),g=c.createGain();S.filter.frequency.setValueAtTime(700+Math.pow(B/100,2)*15000,now);if(index===1){o.type='sine';o.frequency.setValueAtTime(155*Math.pow(2,pitch/24),now);o.frequency.exponentialRampToValueAtTime(43,now+.14)}else{o.type=B<34?'square':B<68?'triangle':'sawtooth';o.frequency.value=freq*(index===3?2:1)}const decay=.055+B/100*.2;g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.42,now+.004);g.gain.exponentialRampToValueAtTime(.0001,now+decay);o.connect(g).connect(S.filter);o.start(now);o.stop(now+decay+.03)}
+function rotateKnobs(){const a=Number(q('#knobA').value),b=Number(q('#knobB').value);q('#knobADisc').style.transform=`rotate(${-135+a*2.7}deg)`;q('#knobBDisc').style.transform=`rotate(${-135+b*2.7}deg)`;q('#knobAValue').textContent=a;q('#knobBValue').textContent=b;q('#metricA').textContent=a;q('#metricB').textContent=b}
+function moveKnob(which,value){if(!S.power)return;const v=Number(value);rotateKnobs();if(S.held.has('bpm')){if(which==='A'){S.swing=v;log('Swing '+v);lessonEvent('swing')}else{S.bpm=Math.round(60+v*1.8);log('Tempo '+S.bpm);lessonEvent('fineTempo')}}else{S.params[S.sound][which==='A'?0:1]=v;trigger(S.sound,S.current);log('Knob '+which);lessonEvent(which==='A'?'knobA':'knobB')}render()}
+function stop(draw=true){if(S.timer)clearTimeout(S.timer);S.timer=null;S.play=false;S.step=0;S.current=0;if(draw)render()}
+function tick(){if(!S.play||!S.power)return;S.current=S.step;S.patterns[S.pattern].forEach((ch,i)=>ch[S.current]&&trigger(i,S.current));const end=S.current===15;S.step=(S.current+1)%16;if(end){S.chainPos=(S.chainPos+1)%S.chain.length;S.pattern=S.chain[S.chainPos];lessonEvent('boundary')}render();const base=60000/S.bpm/4,shift=S.swing/100*.28,delay=base*(S.step%2?1+shift:1-shift);S.timer=setTimeout(tick,delay)}
+function start(){if(!S.power||S.play)return;S.play=true;S.chainPos=0;S.pattern=S.chain[0];log('Playback');lessonEvent('playOn');tick()}
+function fadeStop(){const c=audio();if(!c){stop();lessonEvent('fadeStop');return}S.master.gain.cancelScheduledValues(c.currentTime);S.master.gain.setValueAtTime(S.master.gain.value,c.currentTime);S.master.gain.linearRampToValueAtTime(.0001,c.currentTime+.65);setTimeout(()=>{stop();S.master.gain.value=.13;log('Fade complete');lessonEvent('fadeStop')},680)}
+function holdFn(fn){if(!S.power&&!['pattern','write'].includes(fn))return;if(fn==='pattern'){S.pending=[];S.copy=false}S.held.add(fn);log(fn+' held');if(fn==='sound')lessonEvent('holdSound');else if(fn==='pattern')lessonEvent('holdPattern');else if(fn==='chord')lessonEvent('holdChord');else if(fn==='fx')lessonEvent('holdFx');else if(fn==='bpm')lessonEvent('holdBpm');else if(fn==='write'&&S.play&&!S.write)lessonEvent('holdWriteLive');else if(fn==='write'&&!S.power&&S.held.has('pattern'))lessonEvent('holdWriteReset');render()}
+function tapFn(fn){if(!S.power&&!['pattern','write'].includes(fn)){log('No batteries');return}if(fn==='pattern'&&S.held.has('chord')){S.patterns[S.pattern]=Array.from({length:16},()=>Array(16).fill(false));S.held.delete('chord');log('Pattern cleared');lessonEvent('patternCleared');render();return}if(fn==='play'&&S.held.has('fx')){S.held.delete('fx');fadeStop();return}if(fn==='write'&&S.held.has('pattern')){S.copy=true;log('Copy armed');lessonEvent('copyArmed');render();return}if(fn==='play'){S.play?stop():start();return}if(fn==='write'){if(!S.power){holdFn('write');return}S.write=!S.write;log('Write '+(S.write?'on':'off'));lessonEvent(S.write?'writeOn':'writeOff');render();return}if(fn==='bpm'){S.bpm=S.bpm===80?120:S.bpm===120?140:80;log(S.bpm+' bpm');render();return}log('Hold '+fn)}
+function match(ch,required){return required.every(i=>ch[i])&&ch.filter(Boolean).length===required.length}
+function tapStep(i){if(!S.power)return;if(S.held.has('sound')){S.sound=i;S.held.delete('sound');q('#knobA').value=S.params[i][0];q('#knobB').value=S.params[i][1];rotateKnobs();lessonEvent(i===1?'sound2':i===2?'sound3':i===3?'sound4':i===5?'sound6':'soundSelected');render();return}if(S.held.has('chord')){S.chord=i;S.held.delete('chord');trigger(8,i);if(i===8)lessonEvent('chord9');render();return}if(S.held.has('fx')){S.fx=i;S.held.delete('fx');if(i===12)lessonEvent('fx13');render();return}if(S.held.has('pattern')){if(S.copy){S.patterns[i]=S.patterns[S.pattern].map(ch=>ch.slice());S.copy=false;S.held.delete('pattern');if(i===1)lessonEvent('copied2');render();return}S.pending.push(i);if(S.pending.length===1&&i===1)lessonEvent('patternEntry2');if(S.pending.join(',')==='0,0,1,1')lessonEvent('chainAABB');render();return}if(S.play&&S.held.has('write')&&!S.write){S.patterns[S.pattern][S.sound][S.current]=true;S.liveCount++;trigger(S.sound,S.current);if(S.liveCount>=4)lessonEvent('liveFour');render();return}if(S.write){const ch=S.patterns[S.pattern][S.sound];ch[i]=!ch[i];if(ch[i])trigger(S.sound,i);if(i===0&&ch[i])lessonEvent('step1');if(S.sound===1&&match(ch,[0,4,8,12]))lessonEvent('kickReady');if(S.sound===2&&match(ch,[4,12]))lessonEvent('snareReady');if(S.sound===3&&match(ch,[2,6,10,14]))lessonEvent('hatReady');if(!ch.some(Boolean))lessonEvent('channelEmpty');render();return}trigger(S.sound,i);lessonEvent('audition');render()}
+function releaseHeld(){const patternHeld=S.held.has('pattern'),writeHeld=S.held.has('write');let selectedPattern2=false;if(patternHeld&&S.pending.length){if(S.pending.length===1){S.pattern=S.pending[0];S.chain=[S.pattern];selectedPattern2=S.pattern===1}else{S.chain=S.pending.slice();S.chainPos=0;S.pattern=S.chain[0]}}S.held.clear();S.pending=[];S.copy=false;if(writeHeld&&S.play&&!S.write)log('Record released');if(selectedPattern2)lessonEvent('selected2');lessonEvent('releaseHeld');render()}
+function battery(){if(S.power){stop(false);S.power=false;S.write=false;S.held.clear();S.pending=[];S.copy=false;log('Batteries removed');lessonEvent('batteryOut');render();return}const reset=S.held.has('pattern')&&S.held.has('write');if(reset){baseSetup('demo');log('Factory reset');lessonEvent('factoryReset')}else{S.power=true;S.held.clear();log('Batteries inserted');render()}}
+function setTargets(list){qa('.target').forEach(x=>x.classList.remove('target'));list.forEach(k=>{if(k==='active')S.patterns[S.pattern][S.sound].forEach((v,i)=>v&&q(`[data-key='n${i+1}']`)?.classList.add('target'));else q(`[data-key='${k}']`)?.classList.add('target')})}
+function startLesson(id){S.lesson=id;S.lastLesson=id;S.lessonStep=0;S.lessonComplete=false;S.liveCount=0;const lesson=lessons[id];S.chapter=lesson.chapter;baseSetup(lesson.setup);renderChapters();renderLessonList();renderLessonStep(false)}
+function renderLessonStep(correct){if(!S.lesson)return;const lesson=lessons[S.lesson],step=lesson.steps[S.lessonStep],chapter=chapters.find(c=>c.id===lesson.chapter);q('#chapterLabel').textContent=chapter.title;q('#stepLabel').textContent='STEP '+(S.lessonStep+1)+' / '+lesson.steps.length;q('#lessonTitle').textContent=lesson.title;q('#setupLabel').textContent='STARTING STATE · '+(setupLabels[lesson.setup]||'LESSON-SPECIFIC SETUP');q('#instruction').textContent=(correct?'Correct. Next: ':'')+step.do;q('#why').textContent=step.why;q('#expected').textContent=step.expected;q('#lessonStatus').textContent=correct?'STEP ACCEPTED':'WAITING FOR INPUT';setTargets(step.targets);renderStrip()}
+function lessonEvent(name){if(!S.lesson||S.lessonComplete)return;const lesson=lessons[S.lesson],step=lesson.steps[S.lessonStep];if(!step||step.event!==name)return;S.lessonStep++;if(S.lessonStep>=lesson.steps.length){S.lessonComplete=true;S.completed.add(S.lesson);q('#stepLabel').textContent='COMPLETE';q('#instruction').textContent='Lesson complete.';q('#why').textContent='Use Restart lesson to immediately repeat this lesson from its original setup.';q('#expected').textContent='This lesson is marked complete for the current session.';q('#lessonStatus').textContent='MASTERED · RESTART AVAILABLE';setTargets([]);renderLessonList();renderProgress();renderStrip()}else renderLessonStep(true)}
+function restartLesson(){const id=S.lesson||S.lastLesson;if(id)startLesson(id)}
+function exitLesson(){S.lesson=null;S.lessonStep=0;S.lessonComplete=false;setTargets([]);q('#chapterLabel').textContent='COURSE READY';q('#stepLabel').textContent='STEP —';q('#lessonTitle').textContent='SELECT A LESSON';q('#setupLabel').textContent='STARTING STATE · CHOOSE A LESSON';q('#instruction').textContent='Choose a chapter and lesson below.';q('#why').textContent='Lessons progress from basic controls to complete songs.';q('#expected').textContent='The required controls will be highlighted.';q('#lessonStatus').textContent='READY FOR INPUT';renderLessonList();renderStrip()}
+function renderChapters(){const rail=q('#chapterRail');rail.innerHTML='';chapters.forEach((chapter,index)=>{const b=document.createElement('button');b.type='button';b.className='chapter-button'+(S.chapter===chapter.id?' active':'');b.innerHTML=`<span class='chapter-number'>${index+1}</span><span class='chapter-short'>${chapter.short}</span>`;b.addEventListener('click',()=>{S.chapter=chapter.id;renderChapters();renderLessonList()});rail.appendChild(b)})}
+function renderLessonList(){const chapter=chapters.find(c=>c.id===S.chapter),entries=Object.entries(lessons).filter(([,l])=>l.chapter===S.chapter),list=q('#lessonList');q('#deckTitle').textContent=chapter.title;q('#chapterDescription').textContent=chapter.description;list.innerHTML='';entries.forEach(([id,lesson],index)=>{const b=document.createElement('button');b.type='button';b.className='lesson-button'+(S.lesson===id?' current':'')+(S.completed.has(id)?' done':'');b.innerHTML=`<span class='lesson-number'>${S.completed.has(id)?'✓':index+1}</span><span><span class='lesson-name'>${lesson.title}</span><span class='lesson-meta'>${lesson.time} · ${lesson.steps.length} guided steps · ${setupLabels[lesson.setup]||'custom setup'}</span></span><span class='lesson-mark'>${S.lesson===id?'▶':''}</span>`;b.addEventListener('click',()=>startLesson(id));list.appendChild(b)});renderProgress()}
+function renderProgress(){const total=Object.keys(lessons).length,done=S.completed.size;q('#deckCount').textContent=done+'/'+total;const tape=q('#progressTape');tape.innerHTML='';for(let i=0;i<total;i++){const s=document.createElement('span');if(i<done)s.className='done';tape.appendChild(s)}}
+function renderStrip(){q('#stripStep').textContent=q('#stepLabel').textContent;q('#stripInstruction').textContent=q('#instruction').textContent;q('#stripStatus').textContent=q('#lessonStatus').textContent}
+function render(){q('#device').classList.toggle('off',!S.power);q('#mode').textContent=!S.power?'POWER OFF':S.play&&S.held.has('write')&&!S.write?'LIVE REC':S.write?'WRITE MODE':S.play?'PLAYING':'PLAY MODE';q('#held').textContent='HELD '+(S.held.size?[...S.held].join('+').toUpperCase():'—');q('#pattern').textContent='PATTERN '+String(S.pattern+1).padStart(2,'0');q('#sound').textContent=String(S.sound+1).padStart(2,'0')+' '+soundNames[S.sound].toUpperCase();q('#bpm').textContent=S.bpm;q('#power').textContent=S.power?'PWR ON':'BATTERY OUT';q('#chainText').textContent='CHAIN '+S.chain.map(x=>x+1).join('-');q('#hint').textContent=!S.power?'ALL LIGHTS OFF':S.held.has('bpm')?'A=SWING B=TEMPO':S.copy?'CHOOSE COPY SLOT':S.play&&S.held.has('write')&&!S.write?'TAP KEYS TO RECORD':S.write?'TAP KEYS TO EDIT':S.held.has('pattern')?'ENTER PATTERN SEQUENCE':'PRESS PLAY OR WRITE';q('#batteryBtn').textContent=S.power?'Remove batteries':'Insert batteries';q('#metricPattern').textContent=S.pattern+1;q('#metricSound').textContent=S.sound+1;const selected=S.patterns[S.pattern]?.[S.sound]||[];qa('.step').forEach((b,i)=>{const any=S.patterns[S.pattern]?.some(ch=>ch[i]),now=S.power&&S.play&&i===S.current;b.classList.toggle('any',S.power&&any);b.classList.toggle('selected',S.power&&selected[i]);b.classList.toggle('now',now);b.classList.toggle('fire',now&&any)});qa('.fn').forEach(b=>{const f=b.dataset.fn;b.classList.toggle('held',S.power&&S.held.has(f));b.classList.toggle('active',S.power&&((f==='write'&&S.write)||(f==='play'&&S.play)))});[...q('#stepStrip').children].forEach((x,i)=>{x.classList.toggle('has',S.power&&S.patterns[S.pattern]?.some(ch=>ch[i]));x.classList.toggle('now',S.power&&S.play&&i===S.current)});const chain=q('#chainView');chain.innerHTML='';S.chain.forEach((p,i)=>{const x=document.createElement('span');x.textContent=p+1;if(S.play&&i===S.chainPos)x.className='active';chain.appendChild(x)});if(S.lesson&&!S.lessonComplete)setTargets(lessons[S.lesson].steps[S.lessonStep].targets)}
+qa('.fn').forEach(button=>{let timer,long=false;const fn=button.dataset.fn;button.addEventListener('pointerdown',e=>{e.preventDefault();long=false;timer=setTimeout(()=>{long=true;holdFn(fn)},470)});button.addEventListener('pointerup',e=>{e.preventDefault();clearTimeout(timer);if(!long)tapFn(fn)});button.addEventListener('pointerleave',()=>clearTimeout(timer));button.addEventListener('pointercancel',()=>clearTimeout(timer))});qa('.step').forEach(button=>button.addEventListener('click',()=>tapStep(Number(button.dataset.step))));q('#knobA').addEventListener('input',e=>moveKnob('A',e.target.value));q('#knobB').addEventListener('input',e=>moveKnob('B',e.target.value));q('#releaseBtn').addEventListener('click',releaseHeld);q('#batteryBtn').addEventListener('click',battery);q('#demoBtn').addEventListener('click',()=>baseSetup('demo'));q('#blankBtn').addEventListener('click',()=>baseSetup('blank'));q('#repeatBtn').addEventListener('click',()=>S.lesson&&!S.lessonComplete&&renderLessonStep(false));q('#targetBtn').addEventListener('click',()=>S.lesson&&!S.lessonComplete&&setTargets(lessons[S.lesson].steps[S.lessonStep].targets));q('#restartBtn').addEventListener('click',restartLesson);q('#exitBtn').addEventListener('click',exitLesson);
+const layoutTrack=q('#layoutTrack');
+qa('.knob-shell').forEach(shell=>{
+  const freeze=e=>{shell.setPointerCapture&&shell.setPointerCapture(e.pointerId);layoutTrack.classList.add('no-swipe')};
+  const thaw=()=>layoutTrack.classList.remove('no-swipe');
+  shell.addEventListener('pointerdown',freeze);
+  shell.addEventListener('pointerup',thaw);
+  shell.addEventListener('pointercancel',thaw);
+  shell.addEventListener('lostpointercapture',thaw);
+});
+qa('.key,.knob-shell').forEach(el=>el.addEventListener('contextmenu',e=>e.preventDefault()));
+const strip=q('#strip');
+if(strip)strip.addEventListener('click',()=>q('.course-shell').scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'}));
+if(layoutTrack){
+  const dots=q('#pagerDots');
+  layoutTrack.addEventListener('scroll',()=>{
+    if(!dots)return;
+    const onCourse=layoutTrack.scrollLeft>=layoutTrack.clientWidth/2;
+    q('.pd-emu').classList.toggle('active',!onCourse);
+    q('.pd-course').classList.toggle('active',onCourse);
+  });
+}
+renderChapters();baseSetup('demo');exitLesson();renderStrip();
+})();
+</script>
+</div>
+</main>
+</body>
+</html>

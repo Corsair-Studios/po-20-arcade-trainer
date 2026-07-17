@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.vercel/
+
+# Claude Code / TycoonAgents tooling — internal, not part of the app
+.claude/
+docs/plan/
+CLAUDE.md

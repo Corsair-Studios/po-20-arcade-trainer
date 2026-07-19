@@ -24,11 +24,20 @@ license below. Commercial use is not permitted.
 
 ## Features
 
-- Browser-generated chiptune audio
-- Functional Knob A and Knob B controls
-- 16-step pattern LEDs and playback
-- Pattern editing and simple pattern chains
-- Seven course chapters with eighteen guided lessons
+- Browser-generated chiptune audio — all sixteen voices are individually
+  synthesized, from the noise-based drums and plucky bass to the arpeggiators,
+  the vibrato / portamento / echo modulation voices, and a wavetable hardsync
+- Functional Knob A (pitch) and Knob B (waveform/tone) controls, with per-step
+  parameter locks
+- 16-step pattern LEDs, playback, and a per-step re-trig multiplier (2/4/8/16)
+- Sixteen selectable performance effects — filter sweeps, fill-ins, retrigger,
+  glitch, blinds, a rising arpeggio, and channel solos
+- Sixteen named chords with a sustained drone mode
+- Swing, tempo presets (Hip Hop / Disco / Techno), fine tempo, and master volume
+- True multitrack patterns, pattern chains, copy, and a full sixteen-pattern
+  demo restored by the factory-reset gesture
+- Seven course chapters with twenty-six guided lessons, from first playback
+  through building a multitrack song and performing an advanced track
 - Responsive layout: on phones, the emulator and trainer panels become a
   horizontal swipe pager with a pinned instruction strip; on larger screens
   they sit side by side

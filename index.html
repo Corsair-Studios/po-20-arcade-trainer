@@ -726,6 +726,7 @@ function stop(draw=true){if(S.timer)clearTimeout(S.timer);S.timer=null;S.play=fa
 // Filter-sweep family (slots 5-8): LATCHING — persists until FX is cleared or changed.
 // Retrigger family (slots 11-12) and glitch family (slots 13-14): TEMPORARY — auto-clear at the next pattern boundary.
 const FX_FILTER=new Set([4,5,6,7]),FX_RETRIGGER=new Set([10,11]),FX_GLITCH=new Set([12,13]),FX_FILL=new Set([8,9]),FX_BLINDS=14,FX_RISING=15,FX_TEMPORARY=new Set([...FX_RETRIGGER,...FX_GLITCH,...FX_FILL]);
+const FX_SOLO=new Set([0,1,2,3]);
 const FX_FILTER_DEFAULT=700;
 function resetFxFilter(){if(!S.filter)return;S.filter.frequency.cancelScheduledValues(S.audio?S.audio.currentTime:0);S.filter.frequency.value=FX_FILTER_DEFAULT;S.filter.type='lowpass'}
 function resetBlinds(){if(S.master)applyVolume()}
@@ -774,15 +775,26 @@ function fxRising(step){
   const freq=180*Math.pow(2,semi/12);
   arpNote(c,freq,c.currentTime,0.09,'square');
 }
+// FX 0-3 are latching solos: while active, only the soloed lane group sounds.
+// Solo chords (fx===0) has no sequenced lane to allow (chords aren't a lane
+// in this engine), so it correctly mutes every sequenced lane.
+function soloAllows(i){
+  if(!FX_SOLO.has(S.fx))return true;      // no solo active -> all lanes play
+  if(S.fx===0)return false;               // solo chords: mute all sequenced lanes
+  if(S.fx===1)return i===12;              // solo chords+lead: only lead
+  if(S.fx===2)return i===1||i===2||i===3||i===4;   // solo drums
+  if(S.fx===3)return i===0||i===1||i===2||i===3||i===4; // solo drums+bass
+  return true;
+}
 function fireStep(step){
   const c=S.audio;
-  S.patterns[S.pattern].forEach((ch,i)=>ch[step]&&trigger(i,step));
+  S.patterns[S.pattern].forEach((ch,i)=>ch[step]&&soloAllows(i)&&trigger(i,step));
   const mult=S.mults[S.pattern+':'+step]||1;
   if(mult>1&&c){
     const base=60000/S.bpm/4/1000; // step duration in seconds
     for(let n=1;n<mult;n++){
       const t=n*(base/mult)*1000;
-      setTimeout(()=>{if(!S.play||!S.power)return;S.patterns[S.pattern].forEach((ch,i)=>ch[step]&&trigger(i,step))},t)
+      setTimeout(()=>{if(!S.play||!S.power)return;S.patterns[S.pattern].forEach((ch,i)=>ch[step]&&soloAllows(i)&&trigger(i,step))},t)
     }
   }
 }

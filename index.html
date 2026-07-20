@@ -301,8 +301,154 @@
   cursor:pointer;
 }
 #teCourseApp .po-hw-ok:hover{background:#f4cd93}
+#teCourseApp .po-lib-card{
+  max-width:480px;
+  max-height:86vh;
+  overflow-y:auto;
+  text-align:left;
+}
+#teCourseApp .po-lib-section{
+  margin:0 0 16px;
+  padding-top:14px;
+  border-top:1px solid rgba(239,188,116,.25);
+}
+#teCourseApp .po-lib-section:first-of-type{padding-top:0;border-top:0}
+#teCourseApp .po-lib-label{
+  display:block;
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:#fff;
+  margin:0 0 8px;
+}
+#teCourseApp .po-lib-empty{
+  font-size:12px;
+  color:#efbc74;
+  opacity:.75;
+  margin:0 0 4px;
+}
+#teCourseApp .po-lib-list{
+  display:grid;
+  gap:6px;
+  margin:0 0 4px;
+  padding:0;
+  list-style:none;
+  max-height:220px;
+  overflow-y:auto;
+}
+#teCourseApp .po-lib-row{
+  display:grid;
+  grid-template-columns:1fr auto auto auto;
+  gap:6px;
+  align-items:center;
+  background:rgba(239,188,116,.08);
+  border:1px solid rgba(239,188,116,.3);
+  border-radius:6px;
+  padding:6px 8px;
+}
+#teCourseApp .po-lib-row-info{min-width:0}
+#teCourseApp .po-lib-row-name{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#fff;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#teCourseApp .po-lib-row-name[contenteditable='true']{
+  white-space:normal;
+  outline:1px dashed #efbc74;
+  padding:1px 3px;
+  cursor:text;
+}
+#teCourseApp .po-lib-row-date{
+  display:block;
+  font-size:9px;
+  color:#efbc74;
+  opacity:.8;
+  margin-top:2px;
+}
+#teCourseApp .po-lib-icon-btn{
+  min-width:40px;
+  min-height:40px;
+  padding:4px 8px;
+  border:1px solid #efbc74;
+  border-radius:4px;
+  background:transparent;
+  color:#efbc74;
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+#teCourseApp .po-lib-icon-btn:hover{background:rgba(239,188,116,.15)}
+#teCourseApp .po-lib-icon-btn.danger{border-color:#e0674a;color:#e0674a}
+#teCourseApp .po-lib-icon-btn.danger:hover{background:rgba(224,103,74,.15)}
+#teCourseApp .po-lib-save-row{display:flex;gap:6px}
+#teCourseApp .po-lib-input{
+  flex:1;
+  min-height:40px;
+  min-width:0;
+  padding:8px 10px;
+  border:1px solid #efbc74;
+  border-radius:4px;
+  background:#1c1714;
+  color:#fff;
+  font-size:12px;
+  box-sizing:border-box;
+}
+#teCourseApp .po-lib-input::placeholder{color:#efbc74;opacity:.55}
+#teCourseApp .po-lib-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#teCourseApp .po-lib-btn{
+  min-height:40px;
+  padding:9px 10px;
+  border:0;
+  border-radius:4px;
+  background:#efbc74;
+  color:#2a2320;
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+#teCourseApp .po-lib-btn:hover{background:#f4cd93}
+#teCourseApp .po-lib-btn.secondary{background:transparent;border:1px solid #efbc74;color:#efbc74}
+#teCourseApp .po-lib-btn.secondary:hover{background:rgba(239,188,116,.15)}
+#teCourseApp .po-lib-code{
+  display:block;
+  width:100%;
+  margin-top:8px;
+  padding:8px;
+  border:1px solid rgba(239,188,116,.4);
+  border-radius:4px;
+  background:#1c1714;
+  color:#efbc74;
+  font-size:10px;
+  line-height:1.4;
+  word-break:break-all;
+  white-space:pre-wrap;
+  box-sizing:border-box;
+  user-select:all;
+}
+#teCourseApp .po-lib-status{
+  font-size:11px;
+  margin:8px 0 0;
+  min-height:14px;
+}
+#teCourseApp .po-lib-status.error{color:#e0674a;font-weight:800}
+#teCourseApp .po-lib-status.ok{color:#8fd694;font-weight:800}
+#teCourseApp .po-share-banner{
+  display:grid;
+  gap:10px;
+}
+#teCourseApp .po-share-banner-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:480px){
   #teCourseApp .po-hw-card{padding:16px}
+  #teCourseApp .po-lib-card{max-height:90vh}
+  #teCourseApp .po-lib-row{grid-template-columns:1fr;justify-items:start}
+  #teCourseApp .po-lib-actions{grid-template-columns:1fr}
 }
 #teCourseApp .course-shell{
   position:relative;
@@ -443,7 +589,7 @@
 #teCourseApp .chain-line span.active{background:var(--course-purple);color:white}
 #teCourseApp .utility-button{padding:6px 7px;font-size:10px}
 #teCourseApp .utility-button.target{outline:3px dashed #f4d04e;outline-offset:2px}
-#teCourseApp .course-button:focus-visible,#teCourseApp .utility-button:focus-visible,#teCourseApp .chapter-button:focus-visible,#teCourseApp .lesson-button:focus-visible,#teCourseApp .key:focus-visible,#teCourseApp .knob-shell input:focus-visible{outline:3px solid #efbc74;outline-offset:2px}
+#teCourseApp .course-button:focus-visible,#teCourseApp .utility-button:focus-visible,#teCourseApp .chapter-button:focus-visible,#teCourseApp .lesson-button:focus-visible,#teCourseApp .key:focus-visible,#teCourseApp .knob-shell input:focus-visible,#teCourseApp .po-lib-icon-btn:focus-visible,#teCourseApp .po-lib-btn:focus-visible,#teCourseApp .po-lib-input:focus-visible,#teCourseApp .po-lib-row-name:focus-visible,#teCourseApp .po-hw-close:focus-visible,#teCourseApp .po-hw-ok:focus-visible{outline:3px solid #efbc74;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){
   #teCourseApp *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
@@ -537,6 +683,7 @@
       <button type='button' class='utility-button' id='batteryBtn' data-key='battery'>Remove batteries</button>
       <button type='button' class='utility-button' id='demoBtn'>Load demo</button>
       <button type='button' class='utility-button' id='blankBtn'>Start blank</button>
+      <button type='button' class='utility-button' id='libraryBtn'>Save / Load</button>
     </div>
     <div class='ios-audio-hint' id='iosAudioHint' hidden>
       <span>No sound? Flip your iPhone's ring/silent switch to <strong>Ring</strong>.</span>
@@ -548,6 +695,53 @@
         <h2 class='po-hw-title'>Made for your real PO-20</h2>
         <p class='po-hw-body'>This trainer isn't a true emulator — sounds and timing are approximate. It's built to help you get comfortable with the buttons, patterns, and workflow of an actual Teenage Engineering PO-20 arcade sequencer. You'll get the most out of these lessons with the real hardware in your hands.</p>
         <button type='button' class='po-hw-ok' id='hwNoticeOk'>Got it</button>
+      </div>
+    </div>
+    <div class='po-hw-overlay' id='libraryPanel' hidden>
+      <div class='po-hw-card po-lib-card'>
+        <button type='button' class='po-hw-close' id='libraryPanelX' aria-label='Close'>×</button>
+        <h2 class='po-hw-title'>Save / Load</h2>
+
+        <div class='po-lib-section'>
+          <span class='po-lib-label'>Saved slots</span>
+          <p class='po-lib-empty' id='libraryEmpty' hidden>No saved projects yet. Save your current pattern below.</p>
+          <ul class='po-lib-list' id='libraryList'></ul>
+        </div>
+
+        <div class='po-lib-section'>
+          <span class='po-lib-label'>Save current as&hellip;</span>
+          <div class='po-lib-save-row'>
+            <input type='text' class='po-lib-input' id='librarySaveName' placeholder='Project name' maxlength='60'>
+            <button type='button' class='po-lib-btn' id='librarySaveBtn'>Save</button>
+          </div>
+        </div>
+
+        <div class='po-lib-section'>
+          <span class='po-lib-label'>Export / import file</span>
+          <div class='po-lib-actions'>
+            <button type='button' class='po-lib-btn secondary' id='libraryExportBtn'>Export .po20</button>
+            <button type='button' class='po-lib-btn secondary' id='libraryImportBtn'>Import .po20</button>
+          </div>
+          <input type='file' id='libraryImportFile' accept='.po20,application/json' hidden>
+        </div>
+
+        <div class='po-lib-section'>
+          <span class='po-lib-label'>Share</span>
+          <button type='button' class='po-lib-btn secondary' id='libraryShareBtn' style='width:100%'>Share current project</button>
+          <code class='po-lib-code' id='libraryShareCode' hidden></code>
+        </div>
+
+        <p class='po-lib-status' id='libraryStatus' aria-live='polite'></p>
+      </div>
+    </div>
+    <div class='po-hw-overlay' id='shareImportNotice' hidden>
+      <div class='po-hw-card po-share-banner'>
+        <h2 class='po-hw-title'>Load shared project?</h2>
+        <p class='po-hw-body'>A shared PO-20 project was found in this link. Loading it replaces your current session state.</p>
+        <div class='po-share-banner-actions'>
+          <button type='button' class='po-lib-btn' id='shareImportLoad'>Load</button>
+          <button type='button' class='po-lib-btn secondary' id='shareImportDismiss'>Dismiss</button>
+        </div>
       </div>
     </div>
   </section>
@@ -682,6 +876,442 @@ function baseSetup(mode){stop(false);stopDrone();S.patterns=emptyPatterns();S.pa
   14:{0:2,3:6,6:9,9:6,12:9,15:2},
   15:{0:0,3:4,6:7,9:4,12:0,15:7}
 };Object.entries(LEADMEL).forEach(([p,mel])=>{Object.entries(mel).forEach(([st,semi])=>{const A=50+5*semi;S.plocks[p+':12:'+st]=[Math.max(0,Math.min(100,A)),50]});})}if(mode==='song'){S.patterns[1]=S.patterns[0].map(ch=>ch.slice());[2,6,10,14].forEach(i=>S.patterns[1][3][i]=true);S.chain=[0,0,1,1]}q('#knobA').value=50;q('#knobB').value=50;rotateKnobs();log(mode==='blank'?'Blank loaded':mode==='song'?'Song loaded':'Demo loaded');render()}
+
+// ---- Save/Load: serialization + library CRUD (Task 1) ----
+// Fields captured from S: patterns, pattern, chain, sound, bpm, swing, volume,
+// params, baseParams, plocks, mults, chord, chordChain. Everything else on S
+// (Web Audio nodes, the `held` Set, transport/transient flags, lesson/UI state)
+// is intentionally excluded -- see docs/plan/save-load-feature.md.
+function serializePattern(){
+  return {
+    version:1,
+    patterns:S.patterns.map(pat=>pat.map(ch=>ch.slice())),
+    pattern:S.pattern,
+    chain:S.chain.slice(),
+    sound:S.sound,
+    bpm:S.bpm,
+    swing:S.swing,
+    volume:S.volume,
+    params:S.params.map(pair=>pair.slice()),
+    baseParams:S.baseParams.map(pair=>pair.slice()),
+    plocks:Object.fromEntries(Object.entries(S.plocks).map(([k,v])=>[k,Array.isArray(v)?v.slice():v])),
+    mults:Object.assign({},S.mults),
+    chord:S.chord,
+    chordChain:S.chordChain.slice()
+  };
+}
+function isPatternsShape(p){
+  return Array.isArray(p)&&p.length===16&&p.every(pat=>Array.isArray(pat)&&pat.length===16&&pat.every(ch=>Array.isArray(ch)&&ch.length===16&&ch.every(v=>typeof v==='boolean')));
+}
+function isParamsShape(p){
+  return Array.isArray(p)&&p.length===16&&p.every(pair=>Array.isArray(pair)&&pair.length===2&&pair.every(n=>typeof n==='number'));
+}
+function isNumberArray(a){return Array.isArray(a)&&a.every(n=>typeof n==='number');}
+function isPlainObject(o){return o!==null&&typeof o==='object'&&!Array.isArray(o);}
+// Best-effort migration hook for future schema versions. v1 is identity.
+function migrateProjectData(obj){
+  if(obj.version===1)return obj;
+  // Unknown/future version: no known migration path yet, so refuse rather than guess.
+  return null;
+}
+function validateProjectShape(obj){
+  if(!isPlainObject(obj))return false;
+  if(!isPatternsShape(obj.patterns))return false;
+  if(typeof obj.pattern!=='number')return false;
+  if(!isNumberArray(obj.chain))return false;
+  if(typeof obj.sound!=='number')return false;
+  if(typeof obj.bpm!=='number')return false;
+  if(typeof obj.swing!=='number')return false;
+  if(typeof obj.volume!=='number')return false;
+  if(!isParamsShape(obj.params))return false;
+  if(!isParamsShape(obj.baseParams))return false;
+  if(!isPlainObject(obj.plocks))return false;
+  if(!isPlainObject(obj.mults))return false;
+  if(typeof obj.chord!=='number')return false;
+  if(!isNumberArray(obj.chordChain))return false;
+  return true;
+}
+// Deserializes a plain project object into the live S. Never touches Web Audio
+// nodes, S.held, or any transport/lesson/UI state. Returns true on success,
+// false (never throws) on malformed input.
+function deserializePattern(obj){
+  try{
+    if(!isPlainObject(obj))return false;
+    let data=obj;
+    if(data.version!==1){
+      data=migrateProjectData(data);
+      if(!data)return false;
+    }
+    if(!validateProjectShape(data))return false;
+    S.patterns=data.patterns.map(pat=>pat.map(ch=>ch.slice()));
+    S.pattern=data.pattern;
+    S.chain=data.chain.slice();
+    S.sound=data.sound;
+    S.bpm=data.bpm;
+    S.swing=data.swing;
+    S.volume=data.volume;
+    S.params=data.params.map(pair=>pair.slice());
+    S.baseParams=data.baseParams.map(pair=>pair.slice());
+    S.plocks=Object.fromEntries(Object.entries(data.plocks).map(([k,v])=>[k,Array.isArray(v)?v.slice():v]));
+    S.mults=Object.assign({},data.mults);
+    S.chord=data.chord;
+    S.chordChain=data.chordChain.slice();
+    render();
+    renderStrip();
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+const LIBRARY_KEY='po20:library:v1';
+function makeId(){
+  try{if(crypto&&typeof crypto.randomUUID==='function')return crypto.randomUUID();}catch(e){}
+  return Date.now()+'-'+Math.random().toString(36).slice(2);
+}
+function loadLibraryBlob(){
+  try{
+    const raw=localStorage.getItem(LIBRARY_KEY);
+    if(!raw)return{version:1,slots:[]};
+    const parsed=JSON.parse(raw);
+    if(!isPlainObject(parsed)||!Array.isArray(parsed.slots))return{version:1,slots:[]};
+    return{version:1,slots:parsed.slots};
+  }catch(e){
+    return{version:1,slots:[]};
+  }
+}
+function saveLibraryBlob(blob){
+  try{
+    localStorage.setItem(LIBRARY_KEY,JSON.stringify(blob));
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+function libraryList(){
+  try{
+    return loadLibraryBlob().slots.map(s=>({id:s.id,name:s.name,createdAt:s.createdAt}));
+  }catch(e){
+    return[];
+  }
+}
+function librarySave(name){
+  try{
+    const blob=loadLibraryBlob();
+    const id=makeId();
+    blob.slots.push({id,name,createdAt:Date.now(),data:serializePattern()});
+    saveLibraryBlob(blob);
+    return id;
+  }catch(e){
+    return null;
+  }
+}
+function libraryRename(id,name){
+  try{
+    const blob=loadLibraryBlob();
+    const slot=blob.slots.find(s=>s.id===id);
+    if(!slot)return false;
+    slot.name=name;
+    return saveLibraryBlob(blob);
+  }catch(e){
+    return false;
+  }
+}
+function libraryDelete(id){
+  try{
+    const blob=loadLibraryBlob();
+    const next=blob.slots.filter(s=>s.id!==id);
+    if(next.length===blob.slots.length)return false;
+    blob.slots=next;
+    return saveLibraryBlob(blob);
+  }catch(e){
+    return false;
+  }
+}
+function libraryLoad(id){
+  try{
+    const blob=loadLibraryBlob();
+    const slot=blob.slots.find(s=>s.id===id);
+    if(!slot)return false;
+    return deserializePattern(slot.data);
+  }catch(e){
+    return false;
+  }
+}
+function selfTestSaveLoad(){
+  try{
+    const before=serializePattern();
+    const beforeCopy=JSON.parse(JSON.stringify(before));
+    // Mutate S after serializing to prove deep copy (no shared references).
+    S.patterns[0][0][0]=!S.patterns[0][0][0];
+    S.plocks['__selftest__']=[1,2];
+    S.mults['__selftest__']=3;
+    S.params[0][0]=999;
+    const untouched=JSON.stringify(before)===JSON.stringify(beforeCopy);
+    delete S.plocks['__selftest__'];
+    delete S.mults['__selftest__'];
+    S.patterns[0][0][0]=!S.patterns[0][0][0];
+    S.params[0][0]=beforeCopy.params[0][0];
+    // Round-trip: serialize -> deserialize -> re-serialize should be deep-equal.
+    const snapshot=serializePattern();
+    const ok=deserializePattern(JSON.parse(JSON.stringify(snapshot)));
+    const after=serializePattern();
+    const roundTrip=ok&&JSON.stringify(snapshot)===JSON.stringify(after);
+    console.log('[save-load self-test] deep-copy isolation:',untouched?'PASS':'FAIL','| round-trip:',roundTrip?'PASS':'FAIL');
+  }catch(e){
+    console.log('[save-load self-test] ERROR',e);
+  }
+}
+
+// ---- Save/Load: share codec (Task 2) ----
+// Self-contained byte-oriented compressor: a simple LZ77-style scheme with a
+// small sliding window, applied to the raw UTF-8 bytes of the project's JSON.
+// The dominant payload (the 16x16x16 `patterns` boolean grid) is bit-packed
+// to 512 bytes first since that's the biggest chunk and highly redundant;
+// the remaining JSON (pattern/sound/bpm/plocks/mults/etc) is appended as-is.
+// The whole byte stream then goes through the LZ pass. No external libraries.
+const SHARE_WINDOW=4095; // 12-bit back-reference distance
+const SHARE_MINMATCH=3;
+const SHARE_MAXMATCH=18; // 4-bit length field, offset by MINMATCH
+function utf8Encode(str){
+  // TextEncoder is the standard way to get UTF-8 bytes from a JS string.
+  return new TextEncoder().encode(str);
+}
+function utf8Decode(bytes){
+  return new TextDecoder().decode(bytes);
+}
+// Bit-pack the [16][16][16] boolean patterns grid into 512 bytes (4096 bits).
+function packPatterns(patterns){
+  const bytes=new Uint8Array(512);
+  let bitIndex=0;
+  for(let p=0;p<16;p++){
+    for(let s=0;s<16;s++){
+      for(let st=0;st<16;st++){
+        if(patterns[p][s][st]){
+          bytes[bitIndex>>3]|=(1<<(bitIndex&7));
+        }
+        bitIndex++;
+      }
+    }
+  }
+  return bytes;
+}
+function unpackPatterns(bytes){
+  const patterns=emptyPatterns();
+  let bitIndex=0;
+  for(let p=0;p<16;p++){
+    for(let s=0;s<16;s++){
+      for(let st=0;st<16;st++){
+        const byte=bytes[bitIndex>>3]||0;
+        patterns[p][s][st]=!!(byte&(1<<(bitIndex&7)));
+        bitIndex++;
+      }
+    }
+  }
+  return patterns;
+}
+// Simple sliding-window LZ77 over a byte array. Output token stream:
+//   literal run:  0x00, runLength(1 byte, 1-255), <runLength raw bytes>
+//   back-ref:     0x01, distHi(4 bits)<<4|lenCode(4 bits), distLo(1 byte)
+// distance = (distHi<<8)|distLo, encoded length = lenCode+SHARE_MINMATCH.
+function lzCompress(bytes){
+  const out=[];
+  let i=0;
+  let literalStart=-1;
+  const flushLiterals=(end)=>{
+    if(literalStart<0)return;
+    let start=literalStart;
+    while(start<end){
+      const chunk=Math.min(255,end-start);
+      out.push(0x00,chunk);
+      for(let k=0;k<chunk;k++)out.push(bytes[start+k]);
+      start+=chunk;
+    }
+    literalStart=-1;
+  };
+  while(i<bytes.length){
+    let bestLen=0,bestDist=0;
+    const searchStart=Math.max(0,i-SHARE_WINDOW);
+    if(bytes.length-i>=SHARE_MINMATCH){
+      for(let j=i-1;j>=searchStart;j--){
+        if(bytes[j]!==bytes[i])continue;
+        let len=0;
+        const maxLen=Math.min(SHARE_MAXMATCH,bytes.length-i);
+        while(len<maxLen&&bytes[j+len]===bytes[i+len])len++;
+        if(len>bestLen){bestLen=len;bestDist=i-j;if(len>=SHARE_MAXMATCH)break;}
+      }
+    }
+    if(bestLen>=SHARE_MINMATCH){
+      flushLiterals(i);
+      const lenCode=bestLen-SHARE_MINMATCH;
+      out.push(0x01,((bestDist>>8)<<4)|lenCode,bestDist&0xff);
+      i+=bestLen;
+    }else{
+      if(literalStart<0)literalStart=i;
+      i++;
+    }
+  }
+  flushLiterals(i);
+  return new Uint8Array(out);
+}
+function lzDecompress(bytes){
+  const out=[];
+  let i=0;
+  while(i<bytes.length){
+    const tag=bytes[i++];
+    if(tag===0x00){
+      const runLength=bytes[i++];
+      for(let k=0;k<runLength;k++)out.push(bytes[i++]);
+    }else if(tag===0x01){
+      const b1=bytes[i++],b2=bytes[i++];
+      const lenCode=b1&0x0f,distHi=(b1>>4)&0x0f;
+      const dist=(distHi<<8)|b2,len=lenCode+SHARE_MINMATCH;
+      const start=out.length-dist;
+      for(let k=0;k<len;k++)out.push(out[start+k]);
+    }else{
+      // Corrupt/unrecognized token stream: stop rather than loop forever.
+      break;
+    }
+  }
+  return new Uint8Array(out);
+}
+function bytesToBase64(bytes){
+  let binary='';
+  const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){
+    binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));
+  }
+  return btoa(binary);
+}
+function base64ToBytes(b64){
+  const binary=atob(b64);
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  return bytes;
+}
+function toUrlSafeBase64(b64){
+  return b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function fromUrlSafeBase64(str){
+  let b64=str.replace(/-/g,'+').replace(/_/g,'/');
+  const pad=b64.length%4;
+  if(pad===2)b64+='==';
+  else if(pad===3)b64+='=';
+  else if(pad!==0)return null; // impossible padding remainder -> malformed input
+  return b64;
+}
+// Builds the compressed byte payload for a project object: bit-packed
+// patterns (512 bytes) followed by the LZ-compressed JSON of everything
+// else, so the LZ pass only has to work on the already-small remainder
+// plus benefits from patterns' own repetition being pre-packed.
+function projectToBytes(projectObj){
+  const packed=packPatterns(projectObj.patterns);
+  const rest=Object.assign({},projectObj);
+  delete rest.patterns;
+  const restBytes=utf8Encode(JSON.stringify(rest));
+  const restCompressed=lzCompress(restBytes);
+  const restLen=restCompressed.length;
+  const header=new Uint8Array(4);
+  header[0]=(restLen>>24)&0xff;header[1]=(restLen>>16)&0xff;header[2]=(restLen>>8)&0xff;header[3]=restLen&0xff;
+  const out=new Uint8Array(header.length+packed.length+restCompressed.length);
+  out.set(header,0);
+  out.set(packed,header.length);
+  out.set(restCompressed,header.length+packed.length);
+  return out;
+}
+function bytesToProject(bytes){
+  if(bytes.length<4+512)return null;
+  const restLen=(bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3];
+  const packed=bytes.subarray(4,4+512);
+  const restCompressed=bytes.subarray(4+512,4+512+restLen);
+  const patterns=unpackPatterns(packed);
+  const restBytes=lzDecompress(restCompressed);
+  const rest=JSON.parse(utf8Decode(restBytes));
+  rest.patterns=patterns;
+  return rest;
+}
+// encodeShareCode(projectObj) -> URL-safe base64 string, usable as both a
+// `#p=` fragment and a standalone copy-paste code.
+function encodeShareCode(projectObj){
+  const bytes=projectToBytes(projectObj);
+  return toUrlSafeBase64(bytesToBase64(bytes));
+}
+// decodeShareCode(str) -> exact inverse of encodeShareCode. Returns the plain
+// decoded project object, or null on malformed input (never throws). Does
+// NOT call deserializePattern -- caller decides when/if to apply it.
+function decodeShareCode(str){
+  try{
+    if(typeof str!=='string'||!str.length)return null;
+    const b64=fromUrlSafeBase64(str);
+    if(b64===null)return null;
+    const bytes=base64ToBytes(b64);
+    const project=bytesToProject(bytes);
+    if(!project)return null;
+    return project;
+  }catch(e){
+    return null;
+  }
+}
+let _pendingShareImport=null;
+// pendingShareImport() -> the decoded, shape-validated project object from a
+// `#p=` hash present at boot, or null if none/invalid/already consumed.
+function pendingShareImport(){
+  return _pendingShareImport;
+}
+// applyShareImport() -> actually mutates S via deserializePattern and clears
+// the pending state. Must only be invoked from an explicit user action (a
+// future UI confirm), never automatically at boot.
+function applyShareImport(){
+  if(!_pendingShareImport)return false;
+  const ok=deserializePattern(_pendingShareImport);
+  _pendingShareImport=null;
+  return ok;
+}
+// dismissShareImport() -> lets a future UI discard a pending hash import
+// without applying it (e.g. user declines the confirm prompt).
+function dismissShareImport(){
+  _pendingShareImport=null;
+}
+(function boot_shareImportHook(){
+  // Decode-and-hold only: never mutate S here. A later UI task calls
+  // applyShareImport() after explicit user confirmation.
+  try{
+    const hash=location.hash||'';
+    if(!hash.startsWith('#p='))return;
+    const code=hash.slice(3);
+    const decoded=decodeShareCode(code);
+    if(!decoded)return;
+    let data=decoded;
+    if(data.version!==1){
+      data=migrateProjectData(data);
+      if(!data)return;
+    }
+    if(!validateProjectShape(data))return;
+    _pendingShareImport=data;
+  }catch(e){}
+})();
+// shareProject() -- builds a share URL from the current S, tries
+// navigator.share, falls back to clipboard copy, else returns the url/code
+// for the caller to render as selectable text. Never uses alert()/prompt().
+function shareProject(){
+  const code=encodeShareCode(serializePattern());
+  const url=location.origin+location.pathname+'#p='+code;
+  if(navigator.share){
+    try{
+      const result=navigator.share({url});
+      if(result&&typeof result.catch==='function')result.catch(()=>{});
+    }catch(e){}
+    return{method:'share',url,code};
+  }
+  if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
+    try{
+      const result=navigator.clipboard.writeText(url);
+      if(result&&typeof result.catch==='function')result.catch(()=>{});
+      return{method:'clipboard',url,code};
+    }catch(e){}
+  }
+  return{method:'manual',url,code};
+}
+
 // knob-preview (audition) sounds route here at reduced gain; real pad/sequencer hits go through S.filter
 function audio(){if(!S.audio){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;S.audio=new A();S.master=S.audio.createGain();S.filter=S.audio.createBiquadFilter();S.filter.type='lowpass';S.filter.connect(S.master).connect(S.audio.destination);S.auditionBus=S.audio.createGain();S.auditionBus.gain.value=0.25;S.auditionBus.connect(S.master)}if(!S.noiseBuffer){const len=S.audio.sampleRate*2,buf=S.audio.createBuffer(1,len,S.audio.sampleRate),data=buf.getChannelData(0);for(let i=0;i<len;i++)data[i]=Math.random()*2-1;S.noiseBuffer=buf}if(!S.syncWave){const n=48,real=new Float32Array(n),imag=new Float32Array(n);for(let h=1;h<n;h++){imag[h]=(1/h)*Math.sin(h*1.9)*Math.exp(-h*.03)}S.syncWave=S.audio.createPeriodicWave(real,imag,{disableNormalization:false})}if(S.audio.state==='suspended')S.audio.resume();if(!fading)applyVolume();return S.audio}
 function noiseSource(c){const s=c.createBufferSource();s.buffer=S.noiseBuffer;s.loop=true;return s}
@@ -842,7 +1472,7 @@ function renderLessonList(){const chapter=chapters.find(c=>c.id===S.chapter),ent
 function renderProgress(){const total=Object.keys(lessons).length,done=S.completed.size;q('#deckCount').textContent=done+'/'+total;const tape=q('#progressTape');tape.innerHTML='';for(let i=0;i<total;i++){const s=document.createElement('span');if(i<done)s.className='done';tape.appendChild(s)}}
 function renderStrip(){q('#stripStep').textContent=q('#stepLabel').textContent;q('#stripInstruction').textContent=q('#instruction').textContent;q('#stripStatus').textContent=q('#lessonStatus').textContent}
 function render(){q('#device').classList.toggle('off',!S.power);q('#mode').textContent=!S.power?'POWER OFF':S.play&&S.held.has('write')&&!S.write?'LIVE REC':S.write?'WRITE MODE':S.play?'PLAYING':'PLAY MODE';q('#held').textContent='HELD '+(S.held.size?[...S.held].join('+').toUpperCase():'—');q('#pattern').textContent='PATTERN '+String(S.pattern+1).padStart(2,'0');q('#sound').textContent=String(S.sound+1).padStart(2,'0')+' '+soundNames[S.sound].toUpperCase();q('#bpm').textContent=S.bpm+(tempoName(S.bpm)?' '+tempoName(S.bpm):'');q('#power').textContent=S.power?'PWR ON':'BATTERY OUT';q('#chainText').textContent='CHAIN '+S.chain.map(x=>x+1).join('-');q('#hint').textContent=!S.power?'ALL LIGHTS OFF':S.held.has('bpm')?'A=SWING B=TEMPO':S.copy?'CHOOSE COPY SLOT':S.play&&S.held.has('write')&&!S.write?'TAP KEYS TO RECORD':S.write?'TAP KEYS TO EDIT':S.held.has('pattern')?'ENTER PATTERN SEQUENCE':'PRESS PLAY OR WRITE';q('#batteryBtn').textContent=S.power?'Remove batteries':'Insert batteries';q('#metricPattern').textContent=S.pattern+1;q('#metricSound').textContent=S.sound+1;const selected=S.patterns[S.pattern]?.[S.sound]||[];qa('.step').forEach((b,i)=>{const any=S.patterns[S.pattern]?.some(ch=>ch[i]),now=S.power&&S.play&&i===S.current;b.classList.toggle('any',S.power&&any);b.classList.toggle('selected',S.power&&selected[i]);b.classList.toggle('now',now);b.classList.toggle('fire',now&&any);b.classList.toggle('plock',!!S.plocks[S.pattern+':'+S.sound+':'+i]);b.classList.toggle('mult',!!S.mults[S.pattern+':'+i])});qa('.fn').forEach(b=>{const f=b.dataset.fn;b.classList.toggle('held',S.power&&S.held.has(f));b.classList.toggle('active',S.power&&((f==='write'&&S.write)||(f==='play'&&S.play)))});[...q('#stepStrip').children].forEach((x,i)=>{x.classList.toggle('has',S.power&&S.patterns[S.pattern]?.some(ch=>ch[i]));x.classList.toggle('now',S.power&&S.play&&i===S.current)});const chain=q('#chainView');chain.innerHTML='';S.chain.forEach((p,i)=>{const x=document.createElement('span');x.textContent=p+1;if(S.play&&i===S.chainPos)x.className='active';chain.appendChild(x)});if(S.lesson&&!S.lessonComplete)setTargets(lessons[S.lesson].steps[S.lessonStep].targets)}
-qa('.fn').forEach(button=>{let timer,long=false;const fn=button.dataset.fn;button.addEventListener('pointerdown',e=>{e.preventDefault();long=false;timer=setTimeout(()=>{long=true;holdFn(fn)},470)});button.addEventListener('pointerup',e=>{e.preventDefault();clearTimeout(timer);if(!long)tapFn(fn)});button.addEventListener('pointerleave',()=>clearTimeout(timer));button.addEventListener('pointercancel',()=>clearTimeout(timer))});qa('.step').forEach(button=>{let timer,long=false;const stepIndex=Number(button.dataset.step);button.addEventListener('pointerdown',e=>{e.preventDefault();long=false;timer=setTimeout(()=>{long=true;S.plockTarget=stepIndex;render()},470)});button.addEventListener('pointerup',e=>{e.preventDefault();clearTimeout(timer);if(!long)tapStep(stepIndex);else render()});button.addEventListener('pointerleave',()=>{clearTimeout(timer)});button.addEventListener('pointercancel',()=>{clearTimeout(timer);if(S.plockTarget===stepIndex){S.plockTarget=null;render()}})});q('#knobA').addEventListener('input',e=>moveKnob('A',e.target.value));q('#knobB').addEventListener('input',e=>moveKnob('B',e.target.value));q('#releaseBtn').addEventListener('click',releaseHeld);q('#batteryBtn').addEventListener('click',battery);q('#demoBtn').addEventListener('click',()=>baseSetup('demo'));q('#blankBtn').addEventListener('click',()=>baseSetup('blank'));q('#repeatBtn').addEventListener('click',()=>S.lesson&&!S.lessonComplete&&renderLessonStep(false));q('#restartBtn').addEventListener('click',restartLesson);q('#exitBtn').addEventListener('click',exitLesson);
+qa('.fn').forEach(button=>{let timer,long=false;const fn=button.dataset.fn;button.addEventListener('pointerdown',e=>{e.preventDefault();long=false;timer=setTimeout(()=>{long=true;holdFn(fn)},470)});button.addEventListener('pointerup',e=>{e.preventDefault();clearTimeout(timer);if(!long)tapFn(fn)});button.addEventListener('pointerleave',()=>clearTimeout(timer));button.addEventListener('pointercancel',()=>clearTimeout(timer))});qa('.step').forEach(button=>{let timer,long=false;const stepIndex=Number(button.dataset.step);button.addEventListener('pointerdown',e=>{e.preventDefault();long=false;timer=setTimeout(()=>{long=true;S.plockTarget=stepIndex;render()},470)});button.addEventListener('pointerup',e=>{e.preventDefault();clearTimeout(timer);if(!long)tapStep(stepIndex);else render()});button.addEventListener('pointerleave',()=>{clearTimeout(timer)});button.addEventListener('pointercancel',()=>{clearTimeout(timer);if(S.plockTarget===stepIndex){S.plockTarget=null;render()}})});q('#knobA').addEventListener('input',e=>moveKnob('A',e.target.value));q('#knobB').addEventListener('input',e=>moveKnob('B',e.target.value));q('#releaseBtn').addEventListener('click',releaseHeld);q('#batteryBtn').addEventListener('click',battery);q('#demoBtn').addEventListener('click',()=>baseSetup('demo'));q('#blankBtn').addEventListener('click',()=>baseSetup('blank'));q('#libraryBtn').addEventListener('click',openLibraryPanel);q('#repeatBtn').addEventListener('click',()=>S.lesson&&!S.lessonComplete&&renderLessonStep(false));q('#restartBtn').addEventListener('click',restartLesson);q('#exitBtn').addEventListener('click',exitLesson);
 const layoutTrack=q('#layoutTrack');
 qa('.knob-shell').forEach(shell=>{
   const freeze=e=>{shell.setPointerCapture&&shell.setPointerCapture(e.pointerId);layoutTrack.classList.add('no-swipe')};
@@ -907,7 +1537,208 @@ if(layoutTrack){
   try{stored=JSON.parse(localStorage.getItem('po20:completed'));}catch(e){}
   if(Array.isArray(stored))S.completed=new Set(stored.filter(id=>Object.prototype.hasOwnProperty.call(lessons,id)));
 })();
-renderChapters();baseSetup('demo');exitLesson();renderStrip();
+
+// ---- Save/Load: UI panel (Task 3) ----
+// Wires the #libraryBtn utility button + #libraryPanel overlay to the
+// Task 1 (serializePattern/deserializePattern/library CRUD) and Task 2
+// (share codec) functions. Panel content is re-rendered from libraryList()
+// each time it opens or its data changes; nothing here duplicates the
+// storage/validation logic that already lives in those functions.
+function libraryStatusMsg(text,kind){
+  const el=q('#libraryStatus');
+  if(!el)return;
+  el.textContent=text||'';
+  el.classList.toggle('error',kind==='error');
+  el.classList.toggle('ok',kind==='ok');
+}
+function formatSlotDate(ts){
+  try{
+    const d=new Date(ts);
+    if(isNaN(d.getTime()))return'';
+    return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+  }catch(e){
+    return'';
+  }
+}
+function renderLibraryList(){
+  const list=q('#libraryList'),empty=q('#libraryEmpty');
+  if(!list)return;
+  const slots=libraryList();
+  list.innerHTML='';
+  if(empty)empty.hidden=slots.length>0;
+  slots.forEach(slot=>{
+    const li=document.createElement('li');
+    li.className='po-lib-row';
+    const info=document.createElement('div');
+    info.className='po-lib-row-info';
+    const name=document.createElement('span');
+    name.className='po-lib-row-name';
+    name.textContent=slot.name||'Untitled';
+    const date=document.createElement('span');
+    date.className='po-lib-row-date';
+    date.textContent=formatSlotDate(slot.createdAt);
+    info.appendChild(name);info.appendChild(date);
+    const loadBtn=document.createElement('button');
+    loadBtn.type='button';loadBtn.className='po-lib-icon-btn';loadBtn.textContent='Load';
+    loadBtn.addEventListener('click',()=>{
+      const ok=libraryLoad(slot.id);
+      libraryStatusMsg(ok?'Loaded "'+(slot.name||'Untitled')+'".':'Could not load that slot.',ok?'ok':'error');
+    });
+    const renameBtn=document.createElement('button');
+    renameBtn.type='button';renameBtn.className='po-lib-icon-btn';renameBtn.textContent='Rename';
+    renameBtn.addEventListener('click',()=>{
+      name.contentEditable='true';
+      name.focus();
+      const range=document.createRange();range.selectNodeContents(name);
+      const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+      const commit=()=>{
+        name.contentEditable='false';
+        name.removeEventListener('blur',commit);
+        name.removeEventListener('keydown',onKey);
+        const next=name.textContent.trim();
+        if(!next){name.textContent=slot.name||'Untitled';return;}
+        const ok=libraryRename(slot.id,next);
+        if(ok){slot.name=next;libraryStatusMsg('Renamed to "'+next+'".','ok');}
+        else{name.textContent=slot.name||'Untitled';libraryStatusMsg('Rename failed.','error');}
+      };
+      const onKey=e=>{
+        if(e.key==='Enter'){e.preventDefault();name.blur();}
+        else if(e.key==='Escape'){e.preventDefault();name.textContent=slot.name||'Untitled';name.blur();}
+      };
+      name.addEventListener('blur',commit);
+      name.addEventListener('keydown',onKey);
+    });
+    const deleteBtn=document.createElement('button');
+    deleteBtn.type='button';deleteBtn.className='po-lib-icon-btn danger';deleteBtn.textContent='Delete';
+    deleteBtn.addEventListener('click',()=>{
+      const ok=libraryDelete(slot.id);
+      if(ok){renderLibraryList();libraryStatusMsg('Deleted "'+(slot.name||'Untitled')+'".','ok');}
+      else libraryStatusMsg('Delete failed.','error');
+    });
+    li.appendChild(info);li.appendChild(loadBtn);li.appendChild(renameBtn);li.appendChild(deleteBtn);
+    list.appendChild(li);
+  });
+}
+function openLibraryPanel(){
+  const overlay=q('#libraryPanel');
+  if(!overlay)return;
+  libraryStatusMsg('');
+  const code=q('#libraryShareCode');
+  if(code){code.hidden=true;code.textContent='';}
+  const nameInput=q('#librarySaveName');
+  if(nameInput)nameInput.value='';
+  renderLibraryList();
+  overlay.hidden=false;
+}
+function closeLibraryPanel(){
+  const overlay=q('#libraryPanel');
+  if(overlay)overlay.hidden=true;
+}
+function slotFilenamePart(name){
+  return(name||'project').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'project';
+}
+function exportCurrentProject(){
+  try{
+    const data=serializePattern();
+    const blob=new Blob([JSON.stringify(Object.assign({version:1},data))],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const dateStr=new Date().toISOString().slice(0,10);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='po20-'+slotFilenamePart(q('#librarySaveName')?.value)+'-'+dateStr+'.po20';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    libraryStatusMsg('Exported.','ok');
+  }catch(e){
+    libraryStatusMsg('Export failed.','error');
+  }
+}
+function importProjectFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      const ok=deserializePattern(parsed);
+      if(ok){renderLibraryList();libraryStatusMsg('Imported "'+file.name+'".','ok');}
+      else libraryStatusMsg('That file isn\'t a valid PO-20 project.','error');
+    }catch(e){
+      libraryStatusMsg('Could not read that file (invalid JSON).','error');
+    }
+  };
+  reader.onerror=()=>libraryStatusMsg('Could not read that file.','error');
+  reader.readAsText(file);
+}
+function shareCurrentProject(){
+  try{
+    const result=shareProject();
+    const codeEl=q('#libraryShareCode');
+    if(!result){libraryStatusMsg('Share failed.','error');return;}
+    if(codeEl){
+      codeEl.hidden=false;
+      codeEl.textContent=result.url||result.code||'';
+    }
+    if(result.method==='share')libraryStatusMsg('Shared.','ok');
+    else if(result.method==='clipboard')libraryStatusMsg('Link copied to clipboard. Also shown below.','ok');
+    else libraryStatusMsg('Copy the link below to share.','ok');
+  }catch(e){
+    libraryStatusMsg('Share failed.','error');
+  }
+}
+(function wireLibraryPanel(){
+  const overlay=q('#libraryPanel');
+  if(!overlay)return;
+  const x=q('#libraryPanelX');
+  if(x)x.addEventListener('click',closeLibraryPanel);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeLibraryPanel();});
+  const saveBtn=q('#librarySaveBtn'),nameInput=q('#librarySaveName');
+  if(saveBtn)saveBtn.addEventListener('click',()=>{
+    const name=(nameInput?.value||'').trim();
+    if(!name){libraryStatusMsg('Enter a name first.','error');nameInput?.focus();return;}
+    const id=librarySave(name);
+    if(id){if(nameInput)nameInput.value='';renderLibraryList();libraryStatusMsg('Saved "'+name+'".','ok');}
+    else libraryStatusMsg('Save failed.','error');
+  });
+  if(nameInput)nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveBtn?.click();}});
+  const exportBtn=q('#libraryExportBtn');
+  if(exportBtn)exportBtn.addEventListener('click',exportCurrentProject);
+  const importBtn=q('#libraryImportBtn'),importFile=q('#libraryImportFile');
+  if(importBtn&&importFile){
+    importBtn.addEventListener('click',()=>importFile.click());
+    importFile.addEventListener('change',()=>{
+      const file=importFile.files&&importFile.files[0];
+      importProjectFile(file);
+      importFile.value='';
+    });
+  }
+  const shareBtn=q('#libraryShareBtn');
+  if(shareBtn)shareBtn.addEventListener('click',shareCurrentProject);
+})();
+renderChapters();baseSetup('demo');selfTestSaveLoad();exitLesson();renderStrip();
+(function boot_shareImportBanner(){
+  // Runs once at boot: if Task 2's boot hook decoded a `#p=` hash, show a
+  // confirm affordance rather than auto-applying it (would silently clobber
+  // whatever's currently loaded).
+  const pending=pendingShareImport();
+  if(!pending)return;
+  const overlay=q('#shareImportNotice');
+  if(!overlay)return;
+  overlay.hidden=false;
+  const load=q('#shareImportLoad'),dismiss=q('#shareImportDismiss');
+  const finish=()=>{overlay.hidden=true;};
+  if(load)load.addEventListener('click',()=>{
+    const ok=applyShareImport();
+    finish();
+    if(ok){
+      const panel=q('#libraryPanel');
+      if(panel&&!panel.hidden)renderLibraryList();
+      libraryStatusMsg('Shared project loaded.','ok');
+    }
+  });
+  if(dismiss)dismiss.addEventListener('click',()=>{dismissShareImport();finish();});
+})();
 })();
 </script>
 </div>
